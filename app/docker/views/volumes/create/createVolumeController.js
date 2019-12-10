@@ -81,9 +81,9 @@ function ($q, $scope, $state, VolumeService, PluginService, ResourceControlServi
     $scope.state.actionInProgress = true;
     VolumeService.createVolume(volumeConfiguration)
     .then(function success(data) {
-      const userId = userDetails.ID;
-      const resourceControl = data.ResourceControl;
-      return ResourceControlService.applyResourceControl(userId, accessControlData, resourceControl);
+      var volumeIdentifier = data.Id;
+      var userId = userDetails.ID;
+      return ResourceControlService.applyResourceControl('volume', volumeIdentifier, userId, accessControlData, []);
     })
     .then(function success() {
       Notifications.success('Volume successfully created');

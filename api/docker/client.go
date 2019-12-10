@@ -14,7 +14,6 @@ import (
 const (
 	unsupportedEnvironmentType  = portainer.Error("Environment not supported")
 	defaultDockerRequestTimeout = 60
-	dockerClientVersion         = "1.40"
 )
 
 // ClientFactory is used to create Docker clients
@@ -52,7 +51,7 @@ func (factory *ClientFactory) CreateClient(endpoint *portainer.Endpoint, nodeNam
 func createLocalClient(endpoint *portainer.Endpoint) (*client.Client, error) {
 	return client.NewClientWithOpts(
 		client.WithHost(endpoint.URL),
-		client.WithVersion(dockerClientVersion),
+		client.WithVersion(portainer.SupportedDockerAPIVersion),
 	)
 }
 
@@ -64,7 +63,7 @@ func createTCPClient(endpoint *portainer.Endpoint) (*client.Client, error) {
 
 	return client.NewClientWithOpts(
 		client.WithHost(endpoint.URL),
-		client.WithVersion(dockerClientVersion),
+		client.WithVersion(portainer.SupportedDockerAPIVersion),
 		client.WithHTTPClient(httpCli),
 	)
 }
@@ -85,7 +84,7 @@ func createEdgeClient(endpoint *portainer.Endpoint, reverseTunnelService portain
 
 	return client.NewClientWithOpts(
 		client.WithHost(endpointURL),
-		client.WithVersion(dockerClientVersion),
+		client.WithVersion(portainer.SupportedDockerAPIVersion),
 		client.WithHTTPClient(httpCli),
 		client.WithHTTPHeaders(headers),
 	)
@@ -113,7 +112,7 @@ func createAgentClient(endpoint *portainer.Endpoint, signatureService portainer.
 
 	return client.NewClientWithOpts(
 		client.WithHost(endpoint.URL),
-		client.WithVersion(dockerClientVersion),
+		client.WithVersion(portainer.SupportedDockerAPIVersion),
 		client.WithHTTPClient(httpCli),
 		client.WithHTTPHeaders(headers),
 	)

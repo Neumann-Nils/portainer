@@ -59,9 +59,9 @@ function ($scope, $state, Notifications, SecretService, LabelHelper, Authenticat
 
   $scope.create = function () {
 
-    const accessControlData = $scope.formValues.AccessControlData;
-    const userDetails = Authentication.getUserDetails();
-    const isAdmin = Authentication.isAdmin();
+    var accessControlData = $scope.formValues.AccessControlData;
+    var userDetails = Authentication.getUserDetails();
+    var isAdmin = Authentication.isAdmin();
 
     if (!validateForm(accessControlData, isAdmin)) {
       return;
@@ -71,9 +71,9 @@ function ($scope, $state, Notifications, SecretService, LabelHelper, Authenticat
     var secretConfiguration = prepareConfiguration();
     SecretService.create(secretConfiguration)
     .then(function success(data) {
-      const userId = userDetails.ID;
-      const resourceControl = data.Portainer.ResourceControl;
-      return ResourceControlService.applyResourceControl(userId, accessControlData, resourceControl);
+      var secretIdentifier = data.ID;
+      var userId = userDetails.ID;
+      return ResourceControlService.applyResourceControl('secret', secretIdentifier, userId, accessControlData, []);
     })
     .then(function success() {
       Notifications.success('Secret successfully created');

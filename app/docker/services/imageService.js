@@ -77,20 +77,12 @@ angular.module('portainer.docker')
     return deferred.promise;
   };
 
-  service.pushImage = pushImage;
-  /**
-   * 
-   * @param {PorImageRegistryModel} registryModel
-   */
-  function pushImage(registryModel) {
+  service.pushImage = function(tag, registry) {
     var deferred = $q.defer();
 
-    var authenticationDetails = registryModel.Registry.Authentication ? RegistryService.encodedCredentials(registryModel.Registry) : '';
+    var authenticationDetails = registry.Authentication ? RegistryService.encodedCredentials(registry) : '';
     HttpRequestHelper.setRegistryAuthenticationHeader(authenticationDetails);
-
-    const imageConfiguration = ImageHelper.createImageConfigForContainer(registryModel);
-
-    Image.push({imageName: imageConfiguration.fromImage}).$promise
+    Image.push({tag: tag}).$promise
     .then(function success(data) {
       if (data[data.length - 1].error) {
         deferred.reject({ msg: data[data.length - 1].error });
@@ -102,11 +94,7 @@ angular.module('portainer.docker')
       deferred.reject({ msg: 'Unable to push image tag', err: err });
     });
     return deferred.promise;
-  }
-
-  /**
-   * PULL IMAGE
-   */
+  };
 
   function pullImageAndIgnoreErrors(imageConfiguration) {
     var deferred = $q.defer();
@@ -139,31 +127,21 @@ angular.module('portainer.docker')
     return deferred.promise;
   }
 
-  service.pullImage = pullImage;
-
-  /**
-   * 
-   * @param {PorImageRegistryModel} registry 
-   * @param {bool} ignoreErrors 
-   */
-  function pullImage(registry, ignoreErrors) {
-    var authenticationDetails = registry.Registry.Authentication ? RegistryService.encodedCredentials(registry.Registry) : '';
+  service.pullImage = function(image, registry, ignoreErrors) {
+    var imageDetails = ImageHelper.extractImageAndRegistryFromRepository(image);
+    var imageConfiguration = ImageHelper.createImageConfigForContainer(imageDetails.image, registry.URL);
+    var authenticationDetails = registry.Authentication ? RegistryService.encodedCredentials(registry) : '';
     HttpRequestHelper.setRegistryAuthenticationHeader(authenticationDetails);
-
-    var imageConfiguration = ImageHelper.createImageConfigForContainer(registry);
 
     if (ignoreErrors) {
       return pullImageAndIgnoreErrors(imageConfiguration);
     }
     return pullImageAndAcknowledgeErrors(imageConfiguration);
-  }
+  };
 
-  /**
-   * ! PULL IMAGE
-   */
-
-  service.tagImage = function(id, image) {
-    return Image.tag({id: id, repo: image}).$promise;
+  service.tagImage = function(id, image, registry) {
+    var imageConfig = ImageHelper.createImageConfigForCommit(image, registry);
+    return Image.tag({id: id, tag: imageConfig.tag, repo: imageConfig.repo}).$promise;
   };
 
   service.downloadImages = function(images) {
@@ -192,8 +170,7 @@ angular.module('portainer.docker')
   };
 
   service.getUniqueTagListFromImages = function (availableImages) {
-
-    return _.uniq(_.flatMap(availableImages, function (image) {
+    return _.flatten(_.map(availableImages, function (image) {
       _.remove(image.RepoTags, function (item) {
         return item.indexOf('<none>') !== -1;
       });

@@ -1,10 +1,8 @@
 import _ from 'lodash-es';
 
-import { RegistryTypes } from 'Extensions/registry-management/models/registryTypes';
-
 angular.module('portainer.extensions.registrymanagement')
-.controller('RegistryRepositoriesController', ['$transition$', '$scope',  'RegistryService', 'RegistryServiceSelector', 'Notifications', 'Authentication',
-function ($transition$, $scope, RegistryService, RegistryServiceSelector, Notifications, Authentication) {
+.controller('RegistryRepositoriesController', ['$transition$', '$scope',  'RegistryService', 'RegistryV2Service', 'Notifications', 'Authentication',
+function ($transition$, $scope, RegistryService, RegistryV2Service, Notifications, Authentication) {
 
   $scope.state = {
     displayInvalidConfigurationMessage: false,
@@ -12,11 +10,8 @@ function ($transition$, $scope, RegistryService, RegistryServiceSelector, Notifi
   };
 
   $scope.paginationAction = function (repositories) {
-    if ($scope.registry.Type === RegistryTypes.GITLAB) {
-      return;
-    }
     $scope.state.loading = true;
-    RegistryServiceSelector.getRepositoriesDetails($scope.registry, repositories)
+    RegistryV2Service.getRepositoriesDetails($scope.state.registryId, repositories)
     .then(function success(data) {
       for (var i = 0; i < data.length; i++) {
         var idx = _.findIndex($scope.repositories, {'Name': data[i].Name});
@@ -35,19 +30,20 @@ function ($transition$, $scope, RegistryService, RegistryServiceSelector, Notifi
   };
 
   function initView() {
-    const registryId = $transition$.params().id;
+    $scope.state.registryId = $transition$.params().id;
 
     var authenticationEnabled = $scope.applicationState.application.authentication;
     if (authenticationEnabled) {
       $scope.isAdmin = Authentication.isAdmin();
     }
 
-    RegistryService.registry(registryId)
+    RegistryService.registry($scope.state.registryId)
     .then(function success(data) {
       $scope.registry = data;
-      RegistryServiceSelector.ping($scope.registry, false)
+
+      RegistryV2Service.ping($scope.state.registryId, false)
       .then(function success() {
-        return RegistryServiceSelector.repositories($scope.registry);
+        return RegistryV2Service.catalog($scope.state.registryId);
       })
       .then(function success(data) {
         $scope.repositories = data;

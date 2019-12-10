@@ -94,8 +94,7 @@ module.exports = {
     // new BundleAnalyzerPlugin()
     new LodashModuleReplacementPlugin({
       shorthands: true,
-      collections: true,
-      paths: true
+      collections: true
     }),
     new DefinePlugin({
       __CONFIG_GA_ID: JSON.stringify(pkg.config.GA_ID),

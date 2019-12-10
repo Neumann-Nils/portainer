@@ -52,13 +52,8 @@ angular.module('portainer.app')
   helper.updateContainerConfigurationWithLabels = function(labelsArray) {
     var labels = {};
     labelsArray.forEach(function (l) {
-      if (l.name) {
-        if (l.value) {
-            labels[l.name] = l.value;
-        }
-        else {
-            labels[l.name] = '';
-        }
+      if (l.name && l.value) {
+        labels[l.name] = l.value;
       }
     });
     return labels;

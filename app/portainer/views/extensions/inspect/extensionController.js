@@ -3,19 +3,15 @@ angular.module('portainer.app')
 function ($q, $scope, $transition$, $state, ExtensionService, Notifications, ModalService) {
 
   $scope.state = {
-    onlineUpdateInProgress: false,
-    offlineUpdateInProgress: false,
-    deleteInProgress: false,
-    offlineUpdate: false,
+    updateInProgress: false,
+    deleteInProgress: false
   };
 
   $scope.formValues = {
-    instances: 1,
-    extensionFile: null,
+    instances: 1
   };
 
-  $scope.updateExtensionOnline = updateExtensionOnline;
-  $scope.updateExtensionOffline = updateExtensionOffline;
+  $scope.updateExtension = updateExtension;
   $scope.deleteExtension = deleteExtension;
   $scope.enlargeImage = enlargeImage;
 
@@ -28,7 +24,7 @@ function ($q, $scope, $transition$, $state, ExtensionService, Notifications, Mod
     ExtensionService.delete(extension.Id)
     .then(function onSuccess() {
       Notifications.success('Extension successfully deleted');
-      $state.go('portainer.extensions');
+      $state.reload();
     })
     .catch(function onError(err) {
       Notifications.error('Failure', err, 'Unable to delete extension');
@@ -38,8 +34,8 @@ function ($q, $scope, $transition$, $state, ExtensionService, Notifications, Mod
     });
   }
 
-  function updateExtensionOnline(extension) {
-    $scope.state.onlineUpdateInProgress = true;
+  function updateExtension(extension) {
+    $scope.state.updateInProgress = true;
     ExtensionService.update(extension.Id, extension.Version)
     .then(function onSuccess() {
       Notifications.success('Extension successfully updated');
@@ -49,24 +45,7 @@ function ($q, $scope, $transition$, $state, ExtensionService, Notifications, Mod
       Notifications.error('Failure', err, 'Unable to update extension');
     })
     .finally(function final() {
-      $scope.state.onlineUpdateInProgress = false;
-    });
-  }
-
-  function updateExtensionOffline(extension) {
-    $scope.state.offlineUpdateInProgress = true;
-    const extensionFile = $scope.formValues.ExtensionFile;
-
-    ExtensionService.enable(extension.License.LicenseKey, extensionFile)
-    .then(function onSuccess() {
-      Notifications.success('Extension successfully updated');
-      $state.reload();
-    })
-    .catch(function onError(err) {
-      Notifications.error('Failure', err, 'Unable to update extension');
-    })
-    .finally(function final() {
-      $scope.state.offlineUpdateInProgress = false;
+      $scope.state.updateInProgress = false;
     });
   }
 

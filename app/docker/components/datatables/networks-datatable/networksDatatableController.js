@@ -1,13 +1,13 @@
 import _ from 'lodash-es';
 
 angular.module('portainer.docker')
-  .controller('NetworksDatatableController', ['$scope', '$controller', 'NetworkHelper', 'DatatableService',
-    function ($scope, $controller, NetworkHelper, DatatableService) {
+  .controller('NetworksDatatableController', ['$scope', '$controller', 'PREDEFINED_NETWORKS', 'DatatableService',
+    function ($scope, $controller, PREDEFINED_NETWORKS, DatatableService) {
 
       angular.extend(this, $controller('GenericDatatableController', {$scope: $scope}));
 
       this.disableRemove = function(item) {
-        return NetworkHelper.isSystemNetwork(item);
+        return PREDEFINED_NETWORKS.includes(item.Name);
       };
 
       this.state = Object.assign(this.state, {
@@ -15,7 +15,7 @@ angular.module('portainer.docker')
       })
 
       /**
-       * Do not allow system networks to be selected
+       * Do not allow PREDEFINED_NETWORKS to be selected
        */
       this.allowSelection = function(item) {
         return !this.disableRemove(item);

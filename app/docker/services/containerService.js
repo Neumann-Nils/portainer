@@ -107,14 +107,14 @@ function ContainerServiceFactory($q, Container, ResourceControlService, LogHelpe
 
   service.createAndStartContainer = function(configuration) {
     var deferred = $q.defer();
-    var container;
+    var containerID;
     service.createContainer(configuration)
     .then(function success(data) {
-      container = data;
-      return service.startContainer(container.Id);
+      containerID = data.Id;
+      return service.startContainer(containerID);
     })
     .then(function success() {
-      deferred.resolve(container);
+      deferred.resolve({ Id: containerID });
     })
     .catch(function error(err) {
       deferred.reject(err);
@@ -129,9 +129,13 @@ function ContainerServiceFactory($q, Container, ResourceControlService, LogHelpe
     .then(function success(data) {
       if (data.message) {
         deferred.reject({ msg: data.message, err: data.message });
-      } else {
-        deferred.resolve();
       }
+      if (container.ResourceControl && container.ResourceControl.Type === 1) {
+        return ResourceControlService.deleteResourceControl(container.ResourceControl.Id);
+      }
+    })
+    .then(function success() {
+      deferred.resolve();
     })
     .catch(function error(err) {
       deferred.reject({ msg: 'Unable to remove container', err: err });

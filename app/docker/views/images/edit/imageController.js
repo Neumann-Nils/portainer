@@ -1,11 +1,11 @@
 import _ from 'lodash-es';
-import { PorImageRegistryModel } from 'Docker/models/porImageRegistry';
 
 angular.module('portainer.docker')
-.controller('ImageController', ['$q', '$scope', '$transition$', '$state', '$timeout', 'ImageService', 'ImageHelper', 'RegistryService', 'Notifications', 'HttpRequestHelper', 'ModalService', 'FileSaver', 'Blob',
-function ($q, $scope, $transition$, $state, $timeout, ImageService, ImageHelper, RegistryService, Notifications, HttpRequestHelper, ModalService, FileSaver, Blob) {
+.controller('ImageController', ['$q', '$scope', '$transition$', '$state', '$timeout', 'ImageService', 'RegistryService', 'Notifications', 'HttpRequestHelper', 'ModalService', 'FileSaver', 'Blob',
+function ($q, $scope, $transition$, $state, $timeout, ImageService, RegistryService, Notifications, HttpRequestHelper, ModalService, FileSaver, Blob) {
 	$scope.formValues = {
-		RegistryModel: new PorImageRegistryModel()
+		Image: '',
+		Registry: ''
 	};
 
 	$scope.state = {
@@ -27,11 +27,10 @@ function ($q, $scope, $transition$, $state, $timeout, ImageService, ImageHelper,
 	};
 
 	$scope.tagImage = function() {
-		const registryModel = $scope.formValues.RegistryModel;
+		var image = $scope.formValues.Image;
+		var registry = $scope.formValues.Registry;
 
-		const image = ImageHelper.createImageConfigForContainer(registryModel);
-
-		ImageService.tagImage($transition$.params().id, image.fromImage)
+		ImageService.tagImage($transition$.params().id, image, registry.URL)
 		.then(function success() {
 			Notifications.success('Image successfully tagged');
 			$state.go('docker.images.image', {id: $transition$.params().id}, {reload: true});
@@ -43,9 +42,10 @@ function ($q, $scope, $transition$, $state, $timeout, ImageService, ImageHelper,
 
 	$scope.pushTag = function(repository) {
 		$('#uploadResourceHint').show();
-		RegistryService.retrievePorRegistryModelFromRepository(repository)
-		.then(function success(registryModel) {
-			return ImageService.pushImage(registryModel);
+		RegistryService.retrieveRegistryFromRepository(repository)
+		.then(function success(data) {
+			var registry = data;
+			return ImageService.pushImage(repository, registry);
 		})
 		.then(function success() {
 			Notifications.success('Image successfully pushed', repository);
@@ -60,9 +60,10 @@ function ($q, $scope, $transition$, $state, $timeout, ImageService, ImageHelper,
 
 	$scope.pullTag = function(repository) {
 		$('#downloadResourceHint').show();
-		RegistryService.retrievePorRegistryModelFromRepository(repository)
-		.then(function success(registryModel) {
-			return ImageService.pullImage(registryModel, false);
+		RegistryService.retrieveRegistryFromRepository(repository)
+		.then(function success(data) {
+			var registry = data;
+			return ImageService.pullImage(repository, registry, false);
 		})
 		.then(function success() {
 			Notifications.success('Image successfully pulled', repository);

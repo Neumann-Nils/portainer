@@ -2,8 +2,8 @@ import _ from 'lodash-es';
 import moment from 'moment';
 
 angular.module('portainer.app')
-.factory('StateManager', ['$q', 'SystemService', 'InfoHelper', 'EndpointProvider', 'LocalStorage', 'SettingsService', 'StatusService', 'APPLICATION_CACHE_VALIDITY', 'AgentPingService',
-function StateManagerFactory($q, SystemService, InfoHelper, EndpointProvider, LocalStorage, SettingsService, StatusService, APPLICATION_CACHE_VALIDITY, AgentPingService) {
+.factory('StateManager', ['$q', 'SystemService', 'InfoHelper', 'LocalStorage', 'SettingsService', 'StatusService', 'APPLICATION_CACHE_VALIDITY', 'AgentPingService',
+function StateManagerFactory($q, SystemService, InfoHelper, LocalStorage, SettingsService, StatusService, APPLICATION_CACHE_VALIDITY, AgentPingService) {
   'use strict';
 
   var manager = {};
@@ -124,8 +124,12 @@ function StateManagerFactory($q, SystemService, InfoHelper, EndpointProvider, Lo
       var cacheValidity = now - applicationState.validity;
       if (cacheValidity > APPLICATION_CACHE_VALIDITY) {
         loadApplicationState()
-        .then(() => deferred.resolve(state))
-        .catch((err) => deferred.reject(err));
+        .then(function success() {
+          deferred.resolve(state);
+        })
+        .catch(function error(err) {
+          deferred.reject(err);
+        });
       } else {
         state.application = applicationState;
         state.loading = false;
@@ -133,8 +137,12 @@ function StateManagerFactory($q, SystemService, InfoHelper, EndpointProvider, Lo
       }
     } else {
       loadApplicationState()
-      .then(() => deferred.resolve(state))
-      .catch((err) => deferred.reject(err));
+      .then(function success() {
+        deferred.resolve(state);
+      })
+      .catch(function error(err) {
+        deferred.reject(err);
+      });
     }
 
     return deferred.promise;

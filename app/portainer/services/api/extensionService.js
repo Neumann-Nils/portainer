@@ -2,8 +2,7 @@ import _ from 'lodash-es';
 import { ExtensionViewModel } from '../../models/extension';
 
 angular.module('portainer.app')
-.factory('ExtensionService', ['$q', 'Extension', 'StateManager', '$async', 'FileUploadService',
-function ExtensionServiceFactory($q, Extension, StateManager, $async, FileUploadService) {
+.factory('ExtensionService', ['$q', 'Extension', 'StateManager', '$async', function ExtensionServiceFactory($q, Extension, StateManager, $async) {
   'use strict';
   var service = {};
 
@@ -21,12 +20,8 @@ function ExtensionServiceFactory($q, Extension, StateManager, $async, FileUpload
   service.extensionEnabled = extensionEnabled;
   service.retrieveAndSaveEnabledExtensions = retrieveAndSaveEnabledExtensions;
 
-  function enable(license, extensionFile) {
-    if (extensionFile) {
-      return FileUploadService.uploadExtension(license, extensionFile);
-    } else {
-      return Extension.create({ license: license }).$promise;
-    }
+  function enable(license) {
+    return Extension.create({ license: license }).$promise;
   }
 
   function update(id, version) {

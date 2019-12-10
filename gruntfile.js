@@ -44,12 +44,12 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
     'build:server',
     'build:client',
-    'copy:assets'
+    'copy:templates'
   ]);
 
   grunt.registerTask('start:server', [
     'build:server',
-    'copy:assets',
+    'copy:templates',
     'shell:run_container'
   ]);
 
@@ -70,7 +70,7 @@ module.exports = function(grunt) {
         'config:prod',
         'env:prod',
         'clean:all',
-        'copy:assets',
+        'copy:templates',
         'shell:build_binary:' + p + ':' + a,
         'shell:download_docker_binary:' + p + ':' + a,
         'webpack:prod'
@@ -83,7 +83,7 @@ module.exports = function(grunt) {
         'config:prod',
         'env:prod',
         'clean:all',
-        'copy:assets',
+        'copy:templates',
         'shell:build_binary_azuredevops:' + p + ':' + a,
         'shell:download_docker_binary:' + p + ':' + a,
         'webpack:prod'
@@ -135,16 +135,11 @@ gruntfile_cfg.eslint = {
 };
 
 gruntfile_cfg.copy = {
-  assets: {
+  templates: {
     files: [
       {
         dest: '<%= root %>/',
         src: 'templates.json',
-        cwd: ''
-      },
-      {
-        dest: '<%= root %>/',
-        src: 'extensions.json',
         cwd: ''
       }
     ]

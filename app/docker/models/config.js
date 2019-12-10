@@ -1,10 +1,4 @@
-import { ResourceControlViewModel } from 'Portainer/models/resourceControl/resourceControl';
-
-function b64DecodeUnicode(str) {
-  return decodeURIComponent(atob(str).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-}
+import { ResourceControlViewModel } from '../../portainer/models/resourceControl';
 
 export function ConfigViewModel(data) {
   this.Id = data.ID;
@@ -13,9 +7,11 @@ export function ConfigViewModel(data) {
   this.Version = data.Version.Index;
   this.Name = data.Spec.Name;
   this.Labels = data.Spec.Labels;
-  this.Data = b64DecodeUnicode(data.Spec.Data);
+  this.Data = atob(data.Spec.Data);
 
-  if (data.Portainer && data.Portainer.ResourceControl) {
-    this.ResourceControl = new ResourceControlViewModel(data.Portainer.ResourceControl);
+  if (data.Portainer) {
+    if (data.Portainer.ResourceControl) {
+      this.ResourceControl = new ResourceControlViewModel(data.Portainer.ResourceControl);
+    }
   }
 }

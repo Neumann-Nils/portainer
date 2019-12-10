@@ -41,7 +41,7 @@ func (handler *Handler) endpointDelete(w http.ResponseWriter, r *http.Request) *
 		return &httperror.HandlerError{http.StatusInternalServerError, "Unable to remove endpoint from the database", err}
 	}
 
-	handler.ProxyManager.DeleteEndpointProxy(endpoint)
+	handler.ProxyManager.DeleteProxy(endpoint)
 
 	if len(endpoint.UserAccessPolicies) > 0 || len(endpoint.TeamAccessPolicies) > 0 {
 		err = handler.AuthorizationService.UpdateUsersAuthorizations()

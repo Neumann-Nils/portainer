@@ -28,10 +28,7 @@
     <span class="small text-muted">
       <p>
         <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
-        Deploy the Edge agent on your remote Docker environment using the following command(s)
-      </p>
-      <p>
-        The agent will communicate with Portainer via <u>{{ edgeKeyDetails.instanceURL }}</u> and <u>tcp://{{ edgeKeyDetails.tunnelServerAddr }}</u>
+        Deploy the Edge agent on your remote Docker environment using the following command
       </p>
      <div style="margin-top: 10px;">
        <uib-tabset active="state.deploymentTab">
@@ -43,7 +40,6 @@
               --restart always \
               -e EDGE=1 \
               -e EDGE_ID={{ randomEdgeID }} \
-              -e EDGE_KEY={{ endpoint.EdgeKey }} \
               -e CAP_HOST_MANAGEMENT=1 \
               -p 8000:80 \
               -v portainer_agent_data:/data \
@@ -63,7 +59,6 @@
               -e AGENT_CLUSTER_ADDR=tasks.portainer_edge_agent \
               -e EDGE=1 \
               -e EDGE_ID={{ randomEdgeID }} \
-              -e EDGE_KEY={{ endpoint.EdgeKey }} \
               -e CAP_HOST_MANAGEMENT=1 \
               --mode global \
               --publish mode=host,published=8000,target=80 \
@@ -88,10 +83,10 @@
       </div>
       <p>
         <i class="fa fa-info-circle blue-icon" aria-hidden="true" style="margin-right: 2px;"></i>
-        For those prestaging the edge agent, use the following join token to associate the Edge agent with this endpoint.
+        Use the following join token to associate the Edge agent with this endpoint
       </p>
       <p>
-        You can read more about pre-staging in the userguide available <a href="https://downloads.portainer.io/edge_agent_guide.pdf">here.</a>
+          The agent will communicate with Portainer via <u>{{ edgeKeyDetails.instanceURL }}</u> and <u>tcp://{{ edgeKeyDetails.tunnelServerAddr }}</u>
       </p>
       <div style="margin-top: 10px; overflow-wrap: break-word;">
        <code>

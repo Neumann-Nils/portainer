@@ -87,7 +87,12 @@ func (service *Service) GetBinaryFolder() string {
 // ExtractExtensionArchive extracts the content of an extension archive
 // specified as raw data into the binary store on the filesystem
 func (service *Service) ExtractExtensionArchive(data []byte) error {
-	return archive.UnzipArchive(data, path.Join(service.fileStorePath, BinaryStorePath))
+	err := archive.UnzipArchive(data, path.Join(service.fileStorePath, BinaryStorePath))
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // RemoveDirectory removes a directory on the filesystem.

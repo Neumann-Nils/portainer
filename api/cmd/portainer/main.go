@@ -489,9 +489,24 @@ func initJobService(dockerClientFactory *docker.ClientFactory) portainer.JobServ
 func initExtensionManager(fileService portainer.FileService, extensionService portainer.ExtensionService) (portainer.ExtensionManager, error) {
 	extensionManager := exec.NewExtensionManager(fileService, extensionService)
 
-	err := extensionManager.StartExtensions()
+	extensions, err := extensionService.Extensions()
 	if err != nil {
 		return nil, err
+	}
+
+	for _, extension := range extensions {
+		err := extensionManager.EnableExtension(&extension, extension.License.LicenseKey)
+		if err != nil {
+			log.Printf("Unable to enable extension: %s [extension: %s]", err.Error(), extension.Name)
+			extension.Enabled = false
+			extension.License.Valid = false
+		}
+
+		err = extensionService.Persist(&extension)
+		if err != nil {
+			return nil, err
+		}
+
 	}
 
 	return extensionManager, nil
@@ -624,7 +639,7 @@ func main() {
 		}
 
 		if len(users) == 0 {
-			log.Println("Created admin user with the given password.")
+			log.Printf("Creating admin user with password hash %s", adminPasswordHash)
 			user := &portainer.User{
 				Username:                "admin",
 				Role:                    portainer.AdministratorRole,

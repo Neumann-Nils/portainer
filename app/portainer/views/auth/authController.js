@@ -3,12 +3,11 @@ import uuidv4 from 'uuid/v4';
 
 class AuthenticationController {
   /* @ngInject */
-  constructor($async, $scope, $state, $stateParams, $sanitize, $window, Authentication, UserService, EndpointService, ExtensionService, StateManager, Notifications, SettingsService, URLHelper, LocalStorage, StatusService) {
+  constructor($async, $scope, $state, $stateParams, $sanitize, Authentication, UserService, EndpointService, ExtensionService, StateManager, Notifications, SettingsService, URLHelper, LocalStorage, StatusService) {
     this.$async = $async;
     this.$scope = $scope;
     this.$state = $state;
     this.$stateParams = $stateParams;
-    this.$window = $window;
     this.$sanitize = $sanitize;
     this.Authentication = Authentication;
     this.UserService = UserService;
@@ -33,6 +32,7 @@ class AuthenticationController {
     };
 
     this.retrieveAndSaveEnabledExtensionsAsync = this.retrieveAndSaveEnabledExtensionsAsync.bind(this);
+    this.retrievePermissionsAsync = this.retrievePermissionsAsync.bind(this);
     this.checkForEndpointsAsync = this.checkForEndpointsAsync.bind(this);
     this.checkForLatestVersionAsync = this.checkForLatestVersionAsync.bind(this);
     this.postLoginSteps = this.postLoginSteps.bind(this);
@@ -52,12 +52,10 @@ class AuthenticationController {
    * UTILS FUNCTIONS SECTION
    */
 
-  logout(error) {
+  logout() {
     this.Authentication.logout();
     this.state.loginInProgress = false;
     this.generateOAuthLoginURI();
-    this.LocalStorage.storeLogoutReason(error);
-    this.$window.location.reload();
   }
 
   error(err, message) {
@@ -105,6 +103,16 @@ class AuthenticationController {
    * POST LOGIN STEPS SECTION
    */
 
+  async retrievePermissionsAsync() {
+    try {
+      await this.Authentication.retrievePermissions();
+    } catch (err) {
+      this.state.permissionsError = true;
+      this.logout();
+      this.error(err, 'Unable to retrieve permissions.');
+    }
+  }
+
   async retrieveAndSaveEnabledExtensionsAsync() {
     try {
       await this.ExtensionService.retrieveAndSaveEnabledExtensions();
@@ -146,6 +154,7 @@ class AuthenticationController {
   }
 
   async postLoginSteps() {
+    await this.retrievePermissionsAsync();
     await this.retrieveAndSaveEnabledExtensionsAsync();
     await this.checkForEndpointsAsync(false);
     await this.checkForLatestVersionAsync();
@@ -253,13 +262,9 @@ class AuthenticationController {
       this.generateOAuthLoginURI();
 
       if (this.$stateParams.logout || this.$stateParams.error) {
-        this.logout(this.$stateParams.error);
+        this.logout();
+        this.state.AuthenticationError = this.$stateParams.error;
         return;
-      }
-      const error = this.LocalStorage.getLogoutReason();
-      if (error) {
-        this.state.AuthenticationError = error;
-        this.LocalStorage.cleanLogoutReason();
       }
 
       if (this.Authentication.isAuthenticated()) {

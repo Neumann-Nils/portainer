@@ -104,9 +104,9 @@ class CreateConfigController {
   }
 
   async createAsync() {
-    const accessControlData = this.formValues.AccessControlData;
-    const userDetails = this.Authentication.getUserDetails();
-    const isAdmin = this.Authentication.isAdmin();
+    let accessControlData = this.formValues.AccessControlData;
+    let userDetails = this.Authentication.getUserDetails();
+    let isAdmin = this.Authentication.isAdmin();
 
     if (this.formValues.ConfigContent === "") {
       this.state.formValidationError = "Config content must not be empty";
@@ -117,13 +117,19 @@ class CreateConfigController {
       return;
     }
 
-    const config = this.prepareConfiguration();
+    let config = this.prepareConfiguration();
 
     try {
-      const data = await this.ConfigService.create(config);
-      const resourceControl = data.Portainer.ResourceControl;
-      const userId = userDetails.ID;
-      await this.ResourceControlService.applyResourceControl(userId, accessControlData, resourceControl);
+      let data = await this.ConfigService.create(config);
+      let configIdentifier = data.ID;
+      let userId = userDetails.ID;
+      await this.ResourceControlService.applyResourceControl(
+        "config",
+        configIdentifier,
+        userId,
+        accessControlData,
+        []
+      );
       this.Notifications.success("Config successfully created");
       this.$state.go("docker.configs", {}, { reload: true });
     } catch (err) {

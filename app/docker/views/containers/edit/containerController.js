@@ -1,16 +1,14 @@
 import moment from 'moment';
-import { PorImageRegistryModel } from 'Docker/models/porImageRegistry';
 
 angular.module('portainer.docker')
-.controller('ContainerController', ['$q', '$scope', '$state','$transition$', '$filter', '$async', 'ExtensionService', 'Commit', 'ContainerHelper', 'ContainerService', 'ImageHelper', 'NetworkService', 'Notifications', 'ModalService', 'ResourceControlService', 'RegistryService', 'ImageService', 'HttpRequestHelper', 'Authentication',
-function ($q, $scope, $state, $transition$, $filter, $async, ExtensionService, Commit, ContainerHelper, ContainerService, ImageHelper, NetworkService, Notifications, ModalService, ResourceControlService, RegistryService, ImageService, HttpRequestHelper, Authentication) {
+.controller('ContainerController', ['$q', '$scope', '$state','$transition$', '$filter', 'Commit', 'ContainerHelper', 'ContainerService', 'ImageHelper', 'NetworkService', 'Notifications', 'ModalService', 'ResourceControlService', 'RegistryService', 'ImageService', 'HttpRequestHelper',
+function ($q, $scope, $state, $transition$, $filter, Commit, ContainerHelper, ContainerService, ImageHelper, NetworkService, Notifications, ModalService, ResourceControlService, RegistryService, ImageService, HttpRequestHelper) {
   $scope.activityTime = 0;
   $scope.portBindings = [];
-  $scope.displayRecreateButton = false;
 
   $scope.config = {
-    RegistryModel: new PorImageRegistryModel(),
-    commitInProgress: false
+    Image: '',
+    Registry: ''
   };
 
   $scope.state = {
@@ -52,14 +50,6 @@ function ($q, $scope, $state, $transition$, $filter, $async, ExtensionService, C
           }
         });
       }
-
-      const inSwarm = $scope.container.Config.Labels['com.docker.swarm.service.id'];
-      const autoRemove = $scope.container.HostConfig.AutoRemove;
-      const admin = Authentication.isAdmin();
-
-      ExtensionService.extensionEnabled(ExtensionService.EXTENSIONS.RBAC).then((rbacEnabled) => {
-        $scope.displayRecreateButton = !inSwarm && !autoRemove && (rbacEnabled ? admin : true)
-      });
     })
     .catch(function error(err) {
       Notifications.error('Failure', err, 'Unable to retrieve container info');
@@ -159,23 +149,20 @@ function ($q, $scope, $state, $transition$, $filter, $async, ExtensionService, C
     });
   };
 
-  async function commitContainerAsync() {
-    $scope.config.commitInProgress = true;
-    const registryModel = $scope.config.RegistryModel;
-    const imageConfig = ImageHelper.createImageConfigForContainer(registryModel);
-    try {
-      await Commit.commitContainer({id: $transition$.params().id, repo: imageConfig.fromImage}).$promise;
-      Notifications.success('Image created', $transition$.params().id);
-      $state.reload();
-    } catch (err) {
-      Notifications.error('Failure', err, 'Unable to create image');
-      $scope.config.commitInProgress = false;
-    }
-  }
-
   $scope.commit = function () {
-    return $async(commitContainerAsync);
+    var image = $scope.config.Image;
+    $scope.config.Image = '';
+    var registry = $scope.config.Registry;
+    var imageConfig = ImageHelper.createImageConfigForCommit(image, registry.URL);
+    Commit.commitContainer({id: $transition$.params().id, tag: imageConfig.tag, repo: imageConfig.repo}, function () {
+      update();
+      Notifications.success('Image created', $transition$.params().id);
+    }, function (e) {
+      update();
+      Notifications.error('Failure', e, 'Unable to create image');
+    });
   };
+
 
   $scope.confirmRemove = function () {
     var title = 'You are about to remove a container.';
@@ -218,7 +205,7 @@ function ($q, $scope, $state, $transition$, $filter, $async, ExtensionService, C
       .then(setMainNetworkAndCreateContainer)
       .then(connectContainerToOtherNetworks)
       .then(startContainerIfNeeded)
-      .then(createResourceControl)
+      .then(createResourceControlIfNeeded)
       .then(deleteOldContainer)
       .then(notifyAndChangeView)
       .catch(notifyOnError);
@@ -238,10 +225,13 @@ function ($q, $scope, $state, $transition$, $filter, $async, ExtensionService, C
       if (!pullImage) {
         return $q.when();
       }
-      return RegistryService.retrievePorRegistryModelFromRepository(container.Config.Image)
-      .then(function pullImage(registryModel) {
-        return ImageService.pullImage(registryModel, true);
+      return getRegistry().then(function pullImage(containerRegistery) {
+        return ImageService.pullImage(container.Config.Image, containerRegistery, true);
       });
+    }
+
+    function getRegistry() {
+      return RegistryService.retrieveRegistryFromRepository(container.Config.Image);
     }
 
     function setMainNetworkAndCreateContainer() {
@@ -286,11 +276,19 @@ function ($q, $scope, $state, $transition$, $filter, $async, ExtensionService, C
       );
     }
 
-    function createResourceControl(newContainer) {
-      const userId = Authentication.getUserDetails().ID;
-      const oldResourceControl = container.ResourceControl;
-      const newResourceControl = newContainer.Portainer.ResourceControl;
-      return ResourceControlService.duplicateResourceControl(userId, oldResourceControl, newResourceControl);
+    function createResourceControlIfNeeded(newContainer) {
+      if (!container.ResourceControl) {
+        return $q.when();
+      }
+      var containerIdentifier = newContainer.Id;
+      var resourceControl = container.ResourceControl;
+      var users = resourceControl.UserAccesses.map(function(u) {
+        return u.UserId;
+      });
+      var teams = resourceControl.TeamAccesses.map(function(t) {
+        return t.TeamId;
+      });
+      return ResourceControlService.createResourceControl(resourceControl.Public, users, teams, containerIdentifier, 'container', []);
     }
 
     function notifyAndChangeView() {

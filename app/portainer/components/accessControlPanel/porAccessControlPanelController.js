@@ -1,17 +1,11 @@
 import _ from 'lodash-es';
-import { AccessControlPanelData } from './porAccessControlPanelModel';
-import { ResourceControlOwnership as RCO } from 'Portainer/models/resourceControl/resourceControlOwnership';
-import { ResourceControlTypeString as RCTS, ResourceControlTypeInt as RCTI} from 'Portainer/models/resourceControl/resourceControlTypes';
 
 angular.module('portainer.app')
-.controller('porAccessControlPanelController', ['$q', '$state', 'UserService', 'TeamService', 'ResourceControlHelper', 'ResourceControlService', 'Notifications', 'Authentication', 'ModalService', 'FormValidator',
-function ($q, $state, UserService, TeamService, ResourceControlHelper, ResourceControlService, Notifications, Authentication, ModalService, FormValidator) {
+.controller('porAccessControlPanelController', ['$q', '$state', 'UserService', 'TeamService', 'ResourceControlService', 'Notifications', 'Authentication', 'ModalService', 'FormValidator',
+function ($q, $state, UserService, TeamService, ResourceControlService, Notifications, Authentication, ModalService, FormValidator) {
 
   var ctrl = this;
 
-  ctrl.RCO = RCO;
-  ctrl.RCTS = RCTS;
-  ctrl.RCTI = RCTI;
   ctrl.state = {
     displayAccessControlPanel: false,
     canEditOwnership: false,
@@ -19,23 +13,16 @@ function ($q, $state, UserService, TeamService, ResourceControlHelper, ResourceC
     formValidationError: ''
   };
 
-  ctrl.formValues = new AccessControlPanelData();
+  ctrl.formValues = {
+    Ownership: 'administrators',
+    Ownership_Users: [],
+    Ownership_Teams: []
+  };
 
   ctrl.authorizedUsers = [];
   ctrl.availableUsers = [];
   ctrl.authorizedTeams = [];
   ctrl.availableTeams = [];
-
-  ctrl.canEditOwnership = function() {
-    const hasRC = ctrl.resourceControl;
-    const inheritedVolume = hasRC && ctrl.resourceControl.Type === RCTI.CONTAINER && ctrl.resourceType === RCTS.VOLUME;
-    const inheritedContainer = hasRC && ctrl.resourceControl.Type === RCTI.SERVICE && ctrl.resourceType === RCTS.CONTAINER;
-    const inheritedFromStack = hasRC && ctrl.resourceControl.Type === RCTI.STACK && ctrl.resourceType !== RCTS.STACK;
-    const hasSpecialDisable = ctrl.disableOwnershipChange;
-
-    return !inheritedVolume && !inheritedContainer && !inheritedFromStack && !hasSpecialDisable
-      && !ctrl.state.editOwnership && (ctrl.isAdmin || ctrl.state.canEditOwnership);
-  }
 
   ctrl.confirmUpdateOwnership = function () {
     if (!validateForm()) {
@@ -52,7 +39,7 @@ function ($q, $state, UserService, TeamService, ResourceControlHelper, ResourceC
     var error = '';
 
     var accessControlData = {
-      AccessControlEnabled: ctrl.formValues.Ownership === RCO.PUBLIC ? false : true,
+      AccessControlEnabled: ctrl.formValues.Ownership === 'public' ? false : true,
       Ownership: ctrl.formValues.Ownership,
       AuthorizedUsers: ctrl.formValues.Ownership_Users,
       AuthorizedTeams: ctrl.formValues.Ownership_Teams
@@ -66,8 +53,32 @@ function ($q, $state, UserService, TeamService, ResourceControlHelper, ResourceC
     return true;
   }
 
+  function processOwnershipFormValues() {    
+    var userIds = [];
+    angular.forEach(ctrl.formValues.Ownership_Users, function(user) {
+      userIds.push(user.Id);
+    });
+    var teamIds = [];
+    angular.forEach(ctrl.formValues.Ownership_Teams, function(team) {
+      teamIds.push(team.Id);
+    });
+
+    var publicOnly = ctrl.formValues.Ownership === 'public' ? true : false;
+
+    return {
+      ownership: ctrl.formValues.Ownership,
+      authorizedUserIds: publicOnly ? [] : userIds,
+      authorizedTeamIds: publicOnly ? [] : teamIds,
+      publicOnly: publicOnly
+    };
+  }
+
   function updateOwnership() {
-    ResourceControlService.applyResourceControlChange(ctrl.resourceType, ctrl.resourceId, ctrl.resourceControl, ctrl.formValues)
+    var resourceId = ctrl.resourceId;
+    var ownershipParameters = processOwnershipFormValues();
+
+    ResourceControlService.applyResourceControlChange(ctrl.resourceType, resourceId,
+      ctrl.resourceControl, ownershipParameters)
     .then(function success() {
       Notifications.success('Access control successfully updated');
       $state.reload();
@@ -84,11 +95,16 @@ function ($q, $state, UserService, TeamService, ResourceControlHelper, ResourceC
     ctrl.isAdmin = isAdmin;
     var resourceControl = ctrl.resourceControl;
 
-    if (isAdmin && resourceControl) {
-      ctrl.formValues.Ownership = resourceControl.Ownership === RCO.PRIVATE ? RCO.RESTRICTED : resourceControl.Ownership;
+    if (isAdmin) {
+      if (resourceControl) {
+        ctrl.formValues.Ownership = resourceControl.Ownership === 'private' ? 'restricted' : resourceControl.Ownership;
+      } else {
+        ctrl.formValues.Ownership = 'administrators';
+      }
     } else {
-      ctrl.formValues.Ownership = RCO.ADMINISTRATORS;
+      ctrl.formValues.Ownership = 'administrators';
     }
+
 
     ResourceControlService.retrieveOwnershipDetails(resourceControl)
     .then(function success(data) {
