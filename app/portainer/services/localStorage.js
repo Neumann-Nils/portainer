@@ -131,6 +131,9 @@ angular.module('portainer.app')
     getExpertMode: function() {
       return localStorageService.cookie.get('expertMode');
     },
+    storeLogoutReason: (reason) => localStorageService.set('logout_reason', reason),
+    getLogoutReason: () => localStorageService.get('logout_reason'),
+    cleanLogoutReason: () => localStorageService.remove('logout_reason'),
     clean: function() {
       localStorageService.clearAll();
     }
