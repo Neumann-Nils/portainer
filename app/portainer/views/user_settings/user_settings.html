@@ -1,0 +1,38 @@
+<rd-header>
+  <rd-header-title title-text="Settings"></rd-header-title>
+  <rd-header-content>Settings</rd-header-content>
+</rd-header>
+
+<div class="row">
+  <div class="col-sm-12">
+    <rd-widget>
+      <rd-widget-header icon="fa-cogs" title-text="Application settings"></rd-widget-header>
+      <rd-widget-body>
+        <form class="form-horizontal">
+          <!-- ExpertMode -->
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label for="toggle_expertMode" class="control-label text-left">
+                Expert Mode
+              </label>
+              <label class="switch" style="margin-left: 20px;">
+                <input type="checkbox" name="toggle_expertMode" ng-model="formValues.expertMode"><i></i>
+              </label>
+            </div>
+          </div>
+          <!-- !ExpertMode -->
+          <!-- actions -->
+          <div class="form-group">
+            <div class="col-sm-12">
+              <button type="button" class="btn btn-primary btn-sm" ng-click="saveUserSettings()" ng-disabled="state.actionInProgress" button-spinner="state.actionInProgress">
+                <span ng-hide="state.actionInProgress">Save settings</span>
+                <span ng-show="state.actionInProgress">Saving...</span>
+              </button>
+            </div>
+          </div>
+          <!-- !actions -->
+        </form>
+      </rd-widget-body>
+    </rd-widget>
+  </div>
+</div>

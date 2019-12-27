@@ -933,3 +933,12 @@ json-tree .branch-preview {
   opacity: .5;
 }
 /* !json-tree override */
+
+/* Grade value override */
+.widget .widget-body table tbody * .grade {
+    font-size: 1000% !important;
+}
+
+.full-size-logo {
+    height: inherit;
+}

@@ -55,7 +55,9 @@
         </div>
 
         <!-- Main Content -->
-        <div id="view" ui-view="content" ng-if="!applicationState.loading"></div>
+        <div id="view" ui-view="content" ng-if="!applicationState.loading && applicationState.expertMode"></div>
+        
+        <div id="view" ui-view="ez_content" ng-if="!applicationState.loading && !applicationState.expertMode"></div>
 
       </div><!-- End Page Content -->
     </div><!-- End Content Wrapper -->

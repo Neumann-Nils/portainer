@@ -24,12 +24,21 @@ angular.module('portainer.app', [])
     parent: 'root',
     abstract: true
   };
+  
+  var easyMode = {
+    name: 'easyMode',
+    parent: 'root',
+    abstract: true
+  };
 
   var about = {
     name: 'portainer.about',
     url: '/about',
     views: {
       'content@': {
+        templateUrl: './views/about/about.html',
+      },
+      'ez_content@': {
         templateUrl: './views/about/about.html',
       }
     }
@@ -55,6 +64,11 @@ angular.module('portainer.app', [])
     },
     views: {
       'content@': {
+        templateUrl: './views/auth/auth.html',
+        controller: 'AuthenticationController',
+        controllerAs: 'ctrl'
+      },
+      'ez_content@': {
         templateUrl: './views/auth/auth.html',
         controller: 'AuthenticationController',
         controllerAs: 'ctrl'
@@ -162,6 +176,10 @@ angular.module('portainer.app', [])
       'content@': {
         templateUrl: './views/home/home.html',
         controller: 'HomeController'
+      },
+      'ez_content@': {
+        templateUrl: './views/home/home.html',
+        controller: 'HomeController'
       }
     }
   };
@@ -194,6 +212,10 @@ angular.module('portainer.app', [])
     url: '/admin',
     views: {
       'content@': {
+        templateUrl: './views/init/admin/initAdmin.html',
+        controller: 'InitAdminController'
+      },
+      'ez_content@': {
         templateUrl: './views/init/admin/initAdmin.html',
         controller: 'InitAdminController'
       }
@@ -229,6 +251,10 @@ angular.module('portainer.app', [])
       'content@': {
         templateUrl: './views/registries/registries.html',
         controller: 'RegistriesController'
+      },
+      'ez_content@': {
+        templateUrl: './views/registries/registries.html',
+        controller: 'RegistriesController'
       }
     }
   };
@@ -238,6 +264,10 @@ angular.module('portainer.app', [])
     url: '/:id',
     views: {
       'content@': {
+        templateUrl: './views/registries/edit/registry.html',
+        controller: 'RegistryController'
+      },
+      'ez_content@': {
         templateUrl: './views/registries/edit/registry.html',
         controller: 'RegistryController'
       }
@@ -251,6 +281,10 @@ angular.module('portainer.app', [])
       'content@': {
         templateUrl: './views/registries/create/createregistry.html',
         controller: 'CreateRegistryController'
+      },
+      'ez_content@': {
+        templateUrl: './views/registries/create/createregistry.html',
+        controller: 'CreateRegistryController'
       }
     }
   };
@@ -260,6 +294,10 @@ angular.module('portainer.app', [])
     url: '/access',
     views: {
       'content@': {
+        templateUrl: './views/registries/access/registryAccess.html',
+        controller: 'RegistryAccessController'
+      },
+      'ez_content@': {
         templateUrl: './views/registries/access/registryAccess.html',
         controller: 'RegistryAccessController'
       }
@@ -306,6 +344,25 @@ angular.module('portainer.app', [])
       'content@': {
         templateUrl: './views/settings/settings.html',
         controller: 'SettingsController'
+      },
+      'ez_content@': {
+        templateUrl: './views/settings/settings.html',
+        controller: 'SettingsController'
+      }
+    }
+  };
+  
+  var user_settings = {
+    name: 'portainer.settings.user',
+    url: '/settings',
+    views: {
+      'content@': {
+        templateUrl: './views/user_settings/user_settings.html',
+        controller: 'UserSettingsController'
+      },
+      'ez_content@': {
+        templateUrl: './views/user_settings/user_settings.html',
+        controller: 'UserSettingsController'
       }
     }
   };
@@ -315,6 +372,10 @@ angular.module('portainer.app', [])
     url: '/auth',
     views: {
       'content@': {
+        templateUrl: './views/settings/authentication/settingsAuthentication.html',
+        controller: 'SettingsAuthenticationController'
+      },
+      'ez_content@': {
         templateUrl: './views/settings/authentication/settingsAuthentication.html',
         controller: 'SettingsAuthenticationController'
       }
@@ -473,6 +534,10 @@ angular.module('portainer.app', [])
       'content@': {
         templateUrl: './views/templates/templates.html',
         controller: 'TemplatesController'
+      },
+      'ez_content@': {
+        templateUrl: './views/templates/templates.html',
+        controller: 'TemplatesController'
       }
     }
   };
@@ -482,6 +547,10 @@ angular.module('portainer.app', [])
     url: '/:id',
     views: {
       'content@': {
+        templateUrl: './views/templates/edit/template.html',
+        controller: 'TemplateController'
+      },
+      'ez_content@': {
         templateUrl: './views/templates/edit/template.html',
         controller: 'TemplateController'
       }
@@ -495,12 +564,18 @@ angular.module('portainer.app', [])
       'content@': {
         templateUrl: './views/templates/create/createtemplate.html',
         controller: 'CreateTemplateController'
+      },
+      'ez_content@': {
+        templateUrl: './views/templates/create/createtemplate.html',
+        controller: 'CreateTemplateController'
       }
     }
   };
+  
 
   $stateRegistryProvider.register(root);
   $stateRegistryProvider.register(portainer);
+  $stateRegistryProvider.register(easyMode);
   $stateRegistryProvider.register(about);
   $stateRegistryProvider.register(account);
   $stateRegistryProvider.register(authentication);
@@ -526,6 +601,7 @@ angular.module('portainer.app', [])
   $stateRegistryProvider.register(schedule);
   $stateRegistryProvider.register(scheduleCreation);
   $stateRegistryProvider.register(settings);
+  $stateRegistryProvider.register(user_settings);
   $stateRegistryProvider.register(settingsAuthentication);
   $stateRegistryProvider.register(stacks);
   $stateRegistryProvider.register(stack);

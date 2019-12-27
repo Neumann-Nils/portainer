@@ -32,16 +32,6 @@ function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeServ
       $scope.info = data.info;
       $scope.endpoint = data.endpoint;
       $scope.offlineMode = EndpointProvider.offlineMode();
-      
-      $q.all({
-            container: ContainerService.containerStats(data.containers[0].Id)
-          })
-          .then(function success(dat) {
-            $scope.container = dat.container;
-          })
-          .catch(function error(err) {
-            Notifications.error('Failure', err, 'Unable to load dashboard data');
-          });
     })
     .catch(function error(err) {
       Notifications.error('Failure', err, 'Unable to load dashboard data');

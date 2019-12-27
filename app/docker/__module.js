@@ -71,6 +71,10 @@ angular.module('portainer.docker', ['portainer.app'])
       'content@': {
         templateUrl: './views/containers/edit/container.html',
         controller: 'ContainerController'
+      },
+      'ez_content@': {
+        templateUrl: './views/ez_containers/edit/container.html',
+        controller: 'EasyContainerController'
       }
     }
   };
@@ -148,6 +152,10 @@ angular.module('portainer.docker', ['portainer.app'])
       'content@': {
         templateUrl: './views/dashboard/dashboard.html',
         controller: 'DashboardController'
+      },
+      'ez_content@': {
+        templateUrl: './views/ez_dashboard/ez_dashboard.html',
+        controller: 'EasyDashboardController'
       }
     }
   };
@@ -200,6 +208,10 @@ angular.module('portainer.docker', ['portainer.app'])
       'content@': {
         templateUrl: './views/images/images.html',
         controller: 'ImagesController'
+      },
+      'ez_content@': {
+        templateUrl: './views/images/images.html',
+        controller: 'ImagesController'
       }
     }
   };
@@ -231,6 +243,10 @@ angular.module('portainer.docker', ['portainer.app'])
     url: '/import',
     views: {
       'content@': {
+        templateUrl: './views/images/import/importimage.html',
+        controller: 'ImportImageController'
+      },
+      'ez_content@': {
         templateUrl: './views/images/import/importimage.html',
         controller: 'ImportImageController'
       }

@@ -125,6 +125,12 @@ angular.module('portainer.app')
     getJobImage: function() {
       return localStorageService.get('job_image');
     },
+    storeExpertMode: function(expertMode) {
+      localStorageService.cookie.set('expertMode', expertMode);
+    },
+    getExpertMode: function() {
+      return localStorageService.cookie.get('expertMode');
+    },
     clean: function() {
       localStorageService.clearAll();
     }

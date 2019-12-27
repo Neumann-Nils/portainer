@@ -10,6 +10,7 @@ function StateManagerFactory($q, SystemService, InfoHelper, LocalStorage, Settin
 
   var state = {
     loading: true,
+    expertMode: LocalStorage.getExpertMode(),
     application: {},
     endpoint: {},
     UI: {
@@ -38,6 +39,10 @@ function StateManagerFactory($q, SystemService, InfoHelper, LocalStorage, Settin
     return state;
   };
 
+  manager.setState = function(mode) {
+    LocalStorage.storeExpertMode(mode);
+  }
+
   manager.clean = function () {
     state.endpoint = {};
     state.extensions = [];
@@ -62,6 +67,11 @@ function StateManagerFactory($q, SystemService, InfoHelper, LocalStorage, Settin
     state.application.enableVolumeBrowserForNonAdminUsers = enableVolumeBrowserForNonAdminUsers;
     LocalStorage.storeApplicationState(state.application);
   };
+  
+  manager.updateExpertMode = function(expert) {
+    state.expertMode = expert;
+    LocalStorage.storeExpertMode(expert);
+  }
 
  function assignStateFromStatusAndSettings(status, settings) {
    state.application.authentication = status.Authentication;

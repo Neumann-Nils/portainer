@@ -62,6 +62,9 @@ function ($async, $scope, $state, Notifications, Authentication, StateManager, U
       if (exists) {
         $state.go('portainer.home');
       }
+      else {
+        StateManager.setState(true);
+      }
     })
     .catch(function error(err) {
       Notifications.error('Failure', err, 'Unable to verify administrator account existence');

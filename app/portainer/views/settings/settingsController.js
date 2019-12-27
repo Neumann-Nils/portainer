@@ -22,6 +22,7 @@ function ($scope, $state, Notifications, SettingsService, StateManager) {
 
   $scope.formValues = {
     customLogo: false,
+    expertMode: StateManager.getState().expertMode,
     externalTemplates: false,
     restrictBindMounts: false,
     restrictPrivilegedMode: false,
@@ -60,6 +61,7 @@ function ($scope, $state, Notifications, SettingsService, StateManager) {
       settings.TemplatesURL = '';
     }
 
+    settings.ExpertMode = $scope.formValues.expertMode;
     settings.AllowBindMountsForRegularUsers = !$scope.formValues.restrictBindMounts;
     settings.AllowPrivilegedModeForRegularUsers = !$scope.formValues.restrictPrivilegedMode;
     settings.AllowVolumeBrowserForRegularUsers = $scope.formValues.enableVolumeBrowser;
@@ -77,6 +79,7 @@ function ($scope, $state, Notifications, SettingsService, StateManager) {
       StateManager.updateSnapshotInterval(settings.SnapshotInterval);
       StateManager.updateEnableHostManagementFeatures(settings.EnableHostManagementFeatures);
       StateManager.updateEnableVolumeBrowserForNonAdminUsers(settings.AllowVolumeBrowserForRegularUsers);
+      StateManager.updateExpertMode(settings.ExpertMode);
       $state.reload();
     })
     .catch(function error(err) {

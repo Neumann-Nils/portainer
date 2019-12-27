@@ -17,6 +17,18 @@
             </div>
           </div>
           <!-- !snapshot-interval -->
+          <!-- ExpertMode -->
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label for="toggle_expertMode" class="control-label text-left">
+                Expert Mode
+              </label>
+              <label class="switch" style="margin-left: 20px;">
+                <input type="checkbox" name="toggle_expertMode" ng-model="formValues.expertMode"><i></i>
+              </label>
+            </div>
+          </div>
+          <!-- !ExpertMode -->
           <!-- logo -->
           <div class="form-group">
             <div class="col-sm-12">
@@ -156,7 +168,7 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row" ng-if="applicationState.expertMode">
   <div class="col-sm-12">
     <rd-widget>
       <rd-widget-header icon="fa-tags" title-text="Hidden containers"></rd-widget-header>

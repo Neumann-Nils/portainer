@@ -5,3 +5,8 @@ portainer-checksum.txt
 api/cmd/portainer/portainer*
 .tmp
 .vscode
+.directory
+/bin/
+.tern-project
+.project
+.godir

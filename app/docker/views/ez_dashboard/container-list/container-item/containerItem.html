@@ -1,0 +1,29 @@
+<!-- template -->
+<div class="col-xs-12 col-md-6" ng-if="$ctrl.container" ng-click="$ctrl.onSelect($ctrl.model)" style="margin-bottom: 15px;">
+  <a ui-sref="docker.containers.container({ id: $ctrl.container.Id, nodeName: $ctrl.container.NodeName })">
+    <rd-widget>
+      <rd-widget-body>
+        <div class="full-size-logo pull-left">
+            <div ng-if="$ctrl.container.info.logo">
+              <span>
+                <img class="blocklist-item-logo" style="margin-right: 15px;" ng-src="{{ $ctrl.container.info.logo }}" />
+              </span>
+            </div>
+            <div class="widget-icon blue pull-left" ng-if="!$ctrl.container.info.logo">
+              <span>
+                  <img class="blocklist-item-logo" style="margin-right: 15px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBH%0AZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIzLjAuNCwgU1ZHIEV4cG9y%0AdCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8%0Ac3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6%0AeGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZlcnNpb249%0AIjEuMSIgaWQ9IkViZW5lXzEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIy%0AMDAgMjUgMTU4LjQyNTE3MDkgMTU2Ljc3MTY1MjIiIHN0eWxlPSJlbmFibGUt%0AYmFja2dyb3VuZDpuZXcgMjAwIDI1IDE1OC40MjUxNzA5IDE1Ni43NzE2NTIy%0AOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2Nz%0AcyI+Cgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cgkuc3Qxe2ZpbGw6IzYwRTdFNTt9%0ACjwvc3R5bGU+CjxnPgoJPGxpbmUgeDE9IjI4Mi4yNTgzNjE4IiB5MT0iOTYu%0AMjc0NzgwMyIgeDI9IjI4Mi4yNTgzNjE4IiB5Mj0iOTYuMjc1MjA3NSIvPgoJ%0APGc+CgkJPHBhdGggY2xhc3M9InN0MCIgZD0iTTMxMS4yMzQ1NTgxLDEwMi4y%0ANDU5MTA2djE2LjYyMTI3NjlsLTI5LjAwODc4OTEsMTUuMTk2Mjg5MWwwLjAz%0AMjU5MjgtMzguMDE2OTY3OGwtMzAuODk4ODAzNy0xNi4xMzI0NDYzICAgIGwy%0AOC4zMTkzMzU5LTEyLjc5NjM4NjdsMTIuNTczODUyNSw1LjY5NDcwMjFsMS44%0ANjkyNjI3LTQuODI1ODA1N2wtMTQuNDQxMTYyMS02LjU0MDc3MTVsLTM2Ljgy%0AMjMyNjcsMTYuNjM4ODU1ICAgIGwwLjAyMTU0NTQsNDMuOTA5NDg0OUwyNzku%0ANjQxNzIzNiwxNDEuMjVsMzYuNzYwODAzMi0xOS4yNTU4NTk0di0yMC43ODU1%0AODM1TDMxMS4yMzQ1NTgxLDEwMi4yNDU5MTA2eiBNMjc3LjA1NzgwMDMsMTM0%0ALjA2MzQ3NjYgICAgbC0yOS4wMDk3NjU2LTE1LjE5NjI4OTFWODQuMDEzNjcx%0AOWwyOS4wMDk3NjU2LDE1LjE5NTgwMDhWMTM0LjA2MzQ3NjZ6Ii8+Cgk8L2c+%0ACgk8cG9seWdvbiBjbGFzcz0ic3QxIiBwb2ludHM9IjMxNi40MDI1MjY5LDc4%0ALjA3ODAwMjkgMzAwLjE0NTE0MTYsNzAuNzE0NTk5NiAyOTguMjc1OTM5OSw3%0ANS41NDAyODMyIDMwNy45Mjg4OTQsNzkuOTEyMTA5NCAgIDI4NS44Njk3NTEs%0AOTEuNDY2NzM1OCAyODUuODY5NzUxLDkxLjQ2Njc5NjkgMjg4LjAyNzc3MSw5%0ANi4xNjk0MzM2IDI4OC4wMjgwNzYyLDk2LjE3MDA0MzkgMzExLjIzNDU1ODEs%0AODQuMDEzNjcxOSAgIDMxMS4yMzQ1NTgxLDk0LjgyMzE4MTIgMzE2LjQwMjUy%0ANjksOTMuNzg1NzY2NiAzMTYuNDAzOTMwNyw3OC4xNjAwMzQyIDMxNi40MDM5%0AMzA3LDc4LjA3ODYxMzMgICIvPgo8L2c+Cjwvc3ZnPgo=" />
+              </span>
+          </div>
+        </div>
+        <div>
+          <div class="pull-right">
+            <div ng-if="$ctrl.container.info.isRunning"><i class="fa fa-heartbeat space-right green-icon"></i>running</div>
+            <div ng-if="!$ctrl.container.info.isRunning"><i class="fa fa-heartbeat space-right red-icon"></i>stopped</div>
+          </div>
+          <div class="title">{{ $ctrl.container.Names[0]|trimcontainername }}</div>
+          <div class="comment">{{ $ctrl.container.info.comment }}</div>
+        </div>
+      </rd-widget-body>
+    </rd-widget>
+  </a>
+</div>

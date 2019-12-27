@@ -1,0 +1,14 @@
+<div class="form-group">
+  <label for="image_name" ng-class="$ctrl.labelClass" class="control-label text-left">Name</label>
+  <div ng-class="$ctrl.inputClass">
+    <input type="text" class="form-control" uib-typeahead="image for image in $ctrl.availableImages | filter:$viewValue | limitTo:5"
+      ng-model="$ctrl.image" name="image_name" placeholder="e.g. my_important_backup" required>
+  </div>
+</div>
+<div class="form-group" ng-show="$ctrl.form.image_name.$invalid">
+  <div class="col-sm-12 small text-warning">
+    <div ng-messages="$ctrl.form.image_name.$error">
+      <p ng-message="required"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Backup name is required.</p>
+    </div>
+  </div>
+</div>

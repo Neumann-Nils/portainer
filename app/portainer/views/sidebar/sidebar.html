@@ -15,7 +15,7 @@
     <li class="sidebar-title endpoint-name" ng-if="applicationState.endpoint.name">
       <span class="fa fa-plug space-right"></span>{{ applicationState.endpoint.name }}
     </li>
-    <azure-sidebar-content ng-if="applicationState.endpoint.mode && applicationState.endpoint.mode.provider === 'AZURE'">
+    <azure-sidebar-content ng-if="applicationState.endpoint.mode && applicationState.endpoint.mode.provider === 'AZURE' && applicationState.expertMode">
     </azure-sidebar-content>
     <docker-sidebar-content ng-if="applicationState.endpoint.mode && applicationState.endpoint.mode.provider !== 'AZURE'"
       endpoint-api-version="applicationState.endpoint.apiVersion"
@@ -23,11 +23,12 @@
       standalone-management="applicationState.endpoint.mode.provider === 'DOCKER_STANDALONE' || applicationState.endpoint.mode.provider === 'VMWARE_VIC'"
       admin-access="!applicationState.application.authentication || isAdmin"
       offline-mode="endpointState.OfflineMode"
+      expert-mode="applicationState.expertMode"
     ></docker-sidebar-content>
-    <li class="sidebar-title" authorization="IntegrationStoridgeAdmin" ng-if="applicationState.endpoint.mode && applicationState.endpoint.extensions.length > 0">
+    <li class="sidebar-title" authorization="IntegrationStoridgeAdmin" ng-if="applicationState.endpoint.mode && applicationState.endpoint.extensions.length > 0 && applicationState.expertMode">
       <span>Integrations</span>
     </li>
-    <li authorization="IntegrationStoridgeAdmin" class="sidebar-list" ng-if="applicationState.endpoint.mode && applicationState.endpoint.extensions.indexOf('storidge') !== -1 && applicationState.endpoint.mode.provider === 'DOCKER_SWARM_MODE' && applicationState.endpoint.mode.role === 'MANAGER'">
+    <li authorization="IntegrationStoridgeAdmin" class="sidebar-list" ng-if="applicationState.endpoint.mode && applicationState.endpoint.extensions.indexOf('storidge') !== -1 && applicationState.endpoint.mode.provider === 'DOCKER_SWARM_MODE' && applicationState.endpoint.mode.role === 'MANAGER' && applicationState.expertMode">
       <a ui-sref="storidge.cluster" ui-sref-active="active">Storidge <span class="menu-icon fa fa-bolt fa-fw"></span></a>
       <div class="sidebar-sublist" ng-if="toggle && ($state.current.name === 'storidge.cluster' || $state.current.name === 'storidge.profiles' || $state.current.name === 'storidge.monitor' || $state.current.name === 'storidge.profiles.new' || $state.current.name === 'storidge.profiles.profile' || $state.current.name === 'storidge.drives' || $state.current.name === 'storidge.drives.drive' || $state.current.name === 'storidge.cluster.node')">
         <a ui-sref="storidge.monitor" ui-sref-active="active">Monitor</a>
@@ -39,19 +40,19 @@
         <a ui-sref="storidge.drives" ui-sref-active="active">Drives</a>
       </div>
     </li>
-    <li class="sidebar-title" ng-if="(!applicationState.application.authentication || isAdmin) && applicationState.application.enableHostManagementFeatures">
+    <li class="sidebar-title" ng-if="(!applicationState.application.authentication || isAdmin) && applicationState.application.enableHostManagementFeatures && applicationState.expertMode">
       <span>Scheduler</span>
     </li>
-    <li class="sidebar-list" ng-if="(!applicationState.application.authentication || isAdmin) && applicationState.application.enableHostManagementFeatures">
+    <li class="sidebar-list" ng-if="(!applicationState.application.authentication || isAdmin) && applicationState.application.enableHostManagementFeatures && applicationState.expertMode">
       <a ui-sref="portainer.schedules" ui-sref-active="active">Host jobs <span class="menu-icon fa fa-clock fa-fw"></span></a>
     </li>
     <li class="sidebar-title">
       <span>Settings</span>
     </li>
-    <li class="sidebar-list" ng-if="!applicationState.application.authentication || isAdmin">
+    <li class="sidebar-list" ng-if="(!applicationState.application.authentication || isAdmin) && applicationState.expertMode">
       <a ui-sref="portainer.extensions" ui-sref-active="active">Extensions <span class="menu-icon fa fa-bolt fa-fw"></span></a>
     </li>
-    <li class="sidebar-list" ng-if="applicationState.application.authentication && (isAdmin || isTeamLeader)">
+    <li class="sidebar-list" ng-if="applicationState.application.authentication && (isAdmin || isTeamLeader) && applicationState.expertMode">
       <a ui-sref="portainer.users" ui-sref-active="active">Users <span class="menu-icon fa fa-users fa-fw"></span></a>
       <div class="sidebar-sublist" ng-if="toggle && ($state.current.name === 'portainer.users' || $state.current.name === 'portainer.users.user' || $state.current.name === 'portainer.teams' || $state.current.name === 'portainer.teams.team' || $state.current.name === 'portainer.roles' || $state.current.name === 'portainer.roles.role' || $state.current.name === 'portainer.roles.new')">
         <a ui-sref="portainer.teams" ui-sref-active="active">Teams</a>
@@ -60,7 +61,7 @@
         <a ui-sref="portainer.roles" ui-sref-active="active">Roles</a>
       </div>
     </li>
-    <li class="sidebar-list" ng-if="!applicationState.application.authentication || isAdmin">
+    <li class="sidebar-list" ng-if="(!applicationState.application.authentication || isAdmin) && applicationState.expertMode">
       <a ui-sref="portainer.endpoints" ui-sref-active="active">Endpoints <span class="menu-icon fa fa-plug fa-fw"></span></a>
       <div class="sidebar-sublist" ng-if="toggle && ($state.current.name === 'portainer.endpoints' || $state.current.name === 'portainer.endpoints.endpoint' || $state.current.name === 'portainer.endpoints.new' || $state.current.name === 'portainer.endpoints.endpoint.access' || $state.current.name === 'portainer.groups' || $state.current.name === 'portainer.groups.group' || $state.current.name === 'portainer.groups.group.access' || $state.current.name === 'portainer.groups.new' || $state.current.name === 'portainer.tags')">
         <a ui-sref="portainer.groups" ui-sref-active="active">Groups</a>
@@ -69,14 +70,21 @@
         <a ui-sref="portainer.tags" ui-sref-active="active">Tags</a>
       </div>
     </li>
-    <li class="sidebar-list">
+    <li class="sidebar-list" ng-if="applicationState.expertMode">
       <a ui-sref="portainer.registries" ui-sref-active="active">Registries <span class="menu-icon fa fa-database fa-fw"></span></a>
     </li>
     <li class="sidebar-list" ng-if="!applicationState.application.authentication || isAdmin">
       <a ui-sref="portainer.settings" ui-sref-active="active">Settings <span class="menu-icon fa fa-cogs fa-fw"></span></a>
-      <div class="sidebar-sublist" ng-if="toggle && ($state.current.name === 'portainer.settings' || $state.current.name === 'portainer.settings.authentication' || $state.current.name === 'portainer.about') && applicationState.application.authentication && isAdmin">
-        <a ui-sref="portainer.settings.authentication" ui-sref-active="active">Authentication</a></div>
+      <div class="sidebar-sublist" ng-if="toggle && ($state.current.name === 'portainer.settings' || $state.current.name === 'portainer.settings.authentication' || $state.current.name === 'portainer.about') && applicationState.application.authentication && isAdmin && applicationState.expertMode">
+        <a ui-sref="portainer.settings.authentication" ui-sref-active="active">Authentication</a>
+      </div>
       <div class="sidebar-sublist" ng-if="toggle && ($state.current.name === 'portainer.settings' || $state.current.name === 'portainer.settings.authentication' || $state.current.name === 'portainer.about')">
+        <a ui-sref="portainer.about" ui-sref-active="active">About</a>
+      </div>
+    </li>
+    <li class="sidebar-list" ng-if="!(!applicationState.application.authentication || isAdmin)">
+      <a ui-sref="portainer.settings.user" ui-sref-active="active">Settings <span class="menu-icon fa fa-cogs fa-fw"></span></a>
+      <div class="sidebar-sublist" ng-if="toggle && ($state.current.name === 'portainer.settings.user' || $state.current.name === 'portainer.about')">
         <a ui-sref="portainer.about" ui-sref-active="active">About</a>
       </div>
     </li>
