@@ -108,6 +108,7 @@ function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeServ
       $scope.offlineMode = EndpointProvider.offlineMode();
       $scope.cpuUsage = 0.0;
       $scope.memUsage = 0;
+      $scope.cpuTemp = data.endpoint.Snapshots[0].TempCPU;
       $scope.systemGrade = "-";
       
       finishedWorkers = 0;
@@ -135,7 +136,7 @@ function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeServ
               finishedWorkers++;
               if(finishedWorkers === totalWorkers)
               {
-                $scope.systemGrade = calculateGrade($scope.cpuUsage, $scope.memUsage / data.endpoint.Snapshots[0].TotalMemory, 1, 40);
+                $scope.systemGrade = calculateGrade($scope.cpuUsage, $scope.memUsage / data.endpoint.Snapshots[0].TotalMemory, 1, $scope.cpuTemp);
               }
           });
 

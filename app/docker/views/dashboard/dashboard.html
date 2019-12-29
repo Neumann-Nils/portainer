@@ -38,7 +38,7 @@
               <td>
                 {{ endpoint.Name }}
                 <span class="small text-muted space-left">
-                    <i class="fa fa-microchip"></i> {{ endpoint.Snapshots[0].TotalCPU }}
+                    <i class="fa fa-microchip"></i> {{ endpoint.Snapshots[0].TotalCPU }} {{ endpoint.Snapshots[0].TempCPU }}°C
                     <i class="fa fa-memory space-left"></i> {{ endpoint.Snapshots[0].TotalMemory | humansize }}
                 </span>
                 <span class="small text-muted"> - {{ info.Swarm && info.Swarm.NodeID !== '' ? 'Swarm' : 'Standalone' }} {{ info.ServerVersion }} <span ng-if="endpoint.Type === 2">+ <i class="fa fa-bolt" aria-hidden="true"></i>  Agent</span></span>
@@ -59,6 +59,12 @@
                     {{ tag }}{{ $last? '' : ', ' }}
                   </span>
                 </span>
+              </td>
+            </tr>
+            <tr>
+              <td>Snapshot Info</td>
+              <td>
+                {{ endpoint.Snapshots[0] }}
               </td>
             </tr>
             <tr ng-if="applicationState.endpoint.mode.provider === 'DOCKER_SWARM_MODE' && applicationState.endpoint.mode.role === 'MANAGER'">

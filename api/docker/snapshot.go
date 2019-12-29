@@ -8,7 +8,7 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/client"
-	"github.com/portainer/portainer/api"
+	portainer "github.com/portainer/portainer/api"
 )
 
 func snapshot(cli *client.Client, endpoint *portainer.Endpoint) (*portainer.Snapshot, error) {
@@ -93,6 +93,7 @@ func snapshotNodes(snapshot *portainer.Snapshot, cli *client.Client) error {
 		totalMem += node.Description.Resources.MemoryBytes
 	}
 	snapshot.TotalCPU = int(nanoCpus / 1e9)
+	snapshot.TempCPU = 42
 	snapshot.TotalMemory = totalMem
 	return nil
 }

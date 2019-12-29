@@ -8,7 +8,7 @@
         </div>
       </div>
 
-      <div class="actionBar">
+      <div class="actionBar" ng-if="$ctrl.state.expertMode">
         <div>
           <button type="button" class="btn btn-sm btn-primary" ui-sref="portainer.templates.new" ng-if="$ctrl.showAddAction">
             <i class="fa fa-plus space-right" aria-hidden="true"></i>Add template

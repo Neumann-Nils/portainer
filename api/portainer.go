@@ -393,6 +393,7 @@ type (
 		DockerVersion         string      `json:"DockerVersion"`
 		Swarm                 bool        `json:"Swarm"`
 		TotalCPU              int         `json:"TotalCPU"`
+		TempCPU               int         `json:"TempCPU"`
 		TotalMemory           int64       `json:"TotalMemory"`
 		RunningContainerCount int         `json:"RunningContainerCount"`
 		StoppedContainerCount int         `json:"StoppedContainerCount"`

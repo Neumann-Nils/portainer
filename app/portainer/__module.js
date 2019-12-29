@@ -605,10 +605,6 @@ angular.module('portainer.app', [])
       'content@': {
         templateUrl: './views/templates/create/createtemplate.html',
         controller: 'CreateTemplateController'
-      },
-      'ez_content@': {
-        templateUrl: './views/templates/create/createtemplate.html',
-        controller: 'CreateTemplateController'
       }
     }
   };

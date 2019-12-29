@@ -1,15 +1,18 @@
 import _ from 'lodash-es';
 
-angular.module('portainer.app').controller('TemplateListController', ['DatatableService',
-  function TemplateListController(DatatableService) {
+angular.module('portainer.app').controller('TemplateListController', ['DatatableService', 'StateManager',
+  function TemplateListController(DatatableService, StateManager) {
     var ctrl = this;
 
     this.state = {
       textFilter: '',
       selectedCategory: '',
       categories: [],
-      showContainerTemplates: true
+      showContainerTemplates: true,
+      expertMode: true
     };
+
+    this.state.expertMode = StateManager.getState().expertMode;
 
     this.onTextFilterChange = function() {
       DatatableService.setDataTableTextFilters(this.tableKey, this.state.textFilter);
