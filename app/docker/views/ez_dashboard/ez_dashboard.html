@@ -47,7 +47,7 @@
             <tr>
               <td height="33%">Auslastung</td>
               <td>CPU: {{ cpuUsage.toFixed(2) }}%<br>
-                  RAM: {{ memUsage | humansize }}/{{ endpoint.Snapshots[0].TotalMemory | humansize }}<br>
+                  RAM: {{ memUsage | humansize }}/{{ memTotal | humansize }}<br>
                   Festplatte: 12.5/50 GB
               </td>
               <td>Temperatur</td>
@@ -65,10 +65,10 @@
                   </span>
                 </span>
               </td>
-            </tr>
-            <tr>
+              <tr>
                 <td>Templates</td>
                 <td colspan="3">
+                  {{ endpoint }}
                 </td>
               </tr>
           </tbody>

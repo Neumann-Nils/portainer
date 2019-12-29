@@ -107,7 +107,9 @@ function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeServ
       $scope.templates = data.templates;
       $scope.offlineMode = EndpointProvider.offlineMode();
       $scope.cpuUsage = 0.0;
+      $scope.cpuTotal = data.info.NCPU;
       $scope.memUsage = 0;
+      $scope.memTotal = data.info.MemTotal;
       $scope.cpuTemp = data.endpoint.Snapshots[0].TempCPU;
       $scope.systemGrade = "-";
       
@@ -136,7 +138,7 @@ function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeServ
               finishedWorkers++;
               if(finishedWorkers === totalWorkers)
               {
-                $scope.systemGrade = calculateGrade($scope.cpuUsage, $scope.memUsage / data.endpoint.Snapshots[0].TotalMemory, 1, $scope.cpuTemp);
+                $scope.systemGrade = calculateGrade($scope.cpuUsage, $scope.memUsage / $scope.memTotal, 1, $scope.cpuTemp);
               }
           });
 
@@ -146,12 +148,12 @@ function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeServ
           item.info.comment = "Comment here please";
           for (let i = 0; i < $scope.templates.length; i++)
           {
-            if($scope.templates[i].Image === item.Image)
-            {
-              item.info.logo = $scope.templates[i].Logo;
-              item.info.comment = $scope.templates[i].Description;
-              break;
-            }
+            if($scope.templates[i].RegistryModel.Image === item.Image)
+              {
+                item.info.logo = $scope.templates[i].Logo;
+                item.info.comment = $scope.templates[i].Description;
+                break;
+              }
           }
       });
     })
