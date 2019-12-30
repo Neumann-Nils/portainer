@@ -93,7 +93,6 @@ func snapshotNodes(snapshot *portainer.Snapshot, cli *client.Client) error {
 		totalMem += node.Description.Resources.MemoryBytes
 	}
 	snapshot.TotalCPU = int(nanoCpus / 1e9)
-	snapshot.TempCPU = 42
 	snapshot.TotalMemory = totalMem
 	return nil
 }

@@ -6,8 +6,6 @@ function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeServ
     StateManager.dismissInformationPanel(id);
   };
 
-  var totalWorkers = 0;
-  var finishedWorkers = 0;
   $scope.offlineMode = false;
   $scope.gradeColor = "#000000";
   
@@ -17,11 +15,11 @@ function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeServ
       //Calculate system value
       gradeVal += cpuUsage * 2;
       
-      gradeVal += ramUsage * 2;
+      gradeVal += ramUsage * 1.5;
       
-      gradeVal += diskUsage * 5;
+      gradeVal += diskUsage * 4;
       
-      if (temperature < 40) {
+      if (temperature < 45) {
           //Do  nothing
       }
       else if(temperature <= 50) {
@@ -106,55 +104,32 @@ function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeServ
       $scope.endpoint = data.endpoint;
       $scope.templates = data.templates;
       $scope.offlineMode = EndpointProvider.offlineMode();
-      $scope.cpuUsage = 0.0;
       $scope.cpuTotal = data.info.NCPU;
-      $scope.memUsage = 0;
-      $scope.memTotal = data.info.MemTotal;
-      $scope.cpuTemp = data.endpoint.Snapshots[0].TempCPU;
-      $scope.systemGrade = "-";
+      $scope.cpuUsage = data.endpoint.SystemInfo.CPUInfo.Utilization;
+      $scope.cpuTemp = data.endpoint.SystemInfo.CPUInfo.Temperature;
+      $scope.memUsage = data.endpoint.SystemInfo.MemoryUsage.Used;
+      $scope.memTotal = data.endpoint.SystemInfo.MemoryUsage.Total;
+      $scope.diskUsed = data.endpoint.SystemInfo.DiskUsage.Used;
+      $scope.diskTotal = data.endpoint.SystemInfo.DiskUsage.Total;
+      //$scope.uptime = data.endpoint.SystemInfo.Uptime;
+      $scope.uptime = 1368991;
+      $scope.systemGrade = calculateGrade($scope.cpuUsage, $scope.memUsage / $scope.memTotal, $scope.diskUsed / $scope.diskTotal, $scope.cpuTemp);
       
-      finishedWorkers = 0;
-      totalWorkers = data.containers.length;
       data.containers.forEach(function(item)
       {
-          $q.all({
-            container: ContainerService.containerStats(item.Id)
-          })
-          .then(function success(dat) {
-            var cpuDelta = dat.container.CurrentCPUTotalUsage - dat.container.PreviousCPUTotalUsage;
-            var systemDelta = dat.container.CurrentCPUSystemUsage - dat.container.PreviousCPUSystemUsage;
-
-            if (systemDelta > 0.0 && cpuDelta > 0.0)
-            {
-              $scope.cpuUsage += (cpuDelta / systemDelta) * 100.0;
-            }
-            $scope.memUsage += dat.container.MemoryUsage;
-
-          })
-          .catch(function error(err) {
-            Notifications.error('Failure', err, 'Unable to load dashboard data');
-          })
-          .finally(function f() {
-              finishedWorkers++;
-              if(finishedWorkers === totalWorkers)
-              {
-                $scope.systemGrade = calculateGrade($scope.cpuUsage, $scope.memUsage / $scope.memTotal, 1, $scope.cpuTemp);
-              }
-          });
-
-          item.info = {};
-          item.info.isRunning = (item.State === "running" ? true : false);
-          item.info.name = item.Names[0];
-          item.info.comment = "Comment here please";
-          for (let i = 0; i < $scope.templates.length; i++)
+        item.info = {};
+        item.info.isRunning = (item.State === "running" ? true : false);
+        item.info.name = item.Names[0];
+        item.info.comment = "Comment here please";
+        for (let i = 0; i < $scope.templates.length; i++)
+        {
+          if($scope.templates[i].RegistryModel.Image === item.Image)
           {
-            if($scope.templates[i].RegistryModel.Image === item.Image)
-              {
-                item.info.logo = $scope.templates[i].Logo;
-                item.info.comment = $scope.templates[i].Description;
-                break;
-              }
+            item.info.logo = $scope.templates[i].Logo;
+            item.info.comment = $scope.templates[i].Description;
+            break;
           }
+        }
       });
     })
     .catch(function error(err) {

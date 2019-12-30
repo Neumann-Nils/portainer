@@ -42,13 +42,13 @@
               <td height="33%">Name</td>
               <td>{{ endpoint.Name }}</td>
               <td>Laufzeit</td>
-              <td>12 Tage 2 Stunden 46 Minuten</td>
+              <td>{{ uptime | uptime }}</td>
             </tr>
             <tr>
               <td height="33%">Auslastung</td>
               <td>CPU: {{ cpuUsage.toFixed(2) }}%<br>
                   RAM: {{ memUsage | humansize }}/{{ memTotal | humansize }}<br>
-                  Festplatte: 12.5/50 GB
+                  Festplatte: {{ diskUsed | humansize }}/{{ diskTotal | humansize }}
               </td>
               <td>Temperatur</td>
               <td>{{ cpuTemp }}°C</td>

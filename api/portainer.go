@@ -247,6 +247,35 @@ type (
 	// EndpointStatus represents the status of an endpoint
 	EndpointStatus int
 
+	//EndpointSystemInfo represents information about the endpoint system itself
+	EndpointSystemInfo struct {
+		Error       []string    `json:"errors"`
+		CPUInfo     CPUInfo     `json:"CPUInfo"`
+		DiskUsage   DiskUsage   `json:"DiskUsage"`
+		MemoryUsage MemoryUsage `json:"MemoryUsage"`
+		Uptime      int         `json:"Uptime"`
+	}
+
+	//DiskUsage for endpoint system info
+	DiskUsage struct {
+		Available int `json:"Available"`
+		Used      int `json:"Used"`
+		Total     int `json:"Total"`
+	}
+
+	//CPUInfo holds information about the CPU (temperature, utilization,...)
+	CPUInfo struct {
+		Utilization float32 `json:"Utilization"`
+		Temperature int     `json:"Temperature"`
+	}
+
+	//MemoryUsage for endpoint system info
+	MemoryUsage struct {
+		Available int `json:"Available"`
+		Used      int `json:"Used"`
+		Total     int `json:"Total"`
+	}
+
 	// Endpoint represents a Docker endpoint with all the info required
 	// to connect to it
 	Endpoint struct {
@@ -261,6 +290,7 @@ type (
 		AzureCredentials   AzureCredentials    `json:"AzureCredentials,omitempty"`
 		Tags               []string            `json:"Tags"`
 		Status             EndpointStatus      `json:"Status"`
+		SystemInfo         EndpointSystemInfo  `json:"SystemInfo"`
 		Snapshots          []Snapshot          `json:"Snapshots"`
 		UserAccessPolicies UserAccessPolicies  `json:"UserAccessPolicies"`
 		TeamAccessPolicies TeamAccessPolicies  `json:"TeamAccessPolicies"`
@@ -393,7 +423,6 @@ type (
 		DockerVersion         string      `json:"DockerVersion"`
 		Swarm                 bool        `json:"Swarm"`
 		TotalCPU              int         `json:"TotalCPU"`
-		TempCPU               int         `json:"TempCPU"`
 		TotalMemory           int64       `json:"TotalMemory"`
 		RunningContainerCount int         `json:"RunningContainerCount"`
 		StoppedContainerCount int         `json:"StoppedContainerCount"`

@@ -4,6 +4,44 @@ import filesize from 'filesize';
 
 import { ResourceControlOwnership as RCO } from 'Portainer/models/resourceControl/resourceControlOwnership';
 
+function parseUptime(timeinsec) {
+  let uptime = "";
+  let min = Math.floor(timeinsec / 60) % 60;
+  let hour = Math.floor(timeinsec / (60 * 60)) % 24;
+  let day = Math.floor(timeinsec / (60 * 60 * 24)) % 7;
+  let week = Math.floor(timeinsec / (60 * 60 * 24 * 7)) % 4;
+  let month = Math.floor(timeinsec / (60 * 60 * 24 * 7 * 4)) % 12;
+  let year = Math.floor(timeinsec / (60 * 60 * 24 * 7 * 4 * 12));
+
+  if(min >= 1)
+  {
+    if(year >= 1) {
+      uptime = uptime.concat(year," Jahr", (year > 1 ? "e " : " "));
+    }
+  
+    if(month >= 1) {
+      uptime = uptime.concat(month," Monat", (month > 1 ? "e " : " "));
+    }
+  
+    if(week >= 1) {
+      uptime = uptime.concat(week," Woche", (week > 1 ? "n " : " "));
+    }
+  
+    if(day >= 1) {
+      uptime = uptime.concat(day," Tag", (day > 1 ? "e " : " "));
+    }
+  
+    if(hour >= 1) {
+      uptime = uptime.concat(hour," Stunde", (hour > 1 ? "n " : " "));
+    }
+    uptime = uptime.concat(min," Minute", (min > 1 ? "n " : " "));
+  }
+  else {
+    uptime = "Kürzer als 1 Minute"
+  }
+  return uptime;
+}
+
 angular.module('portainer.app')
 .filter('truncate', function () {
   'use strict';
@@ -73,6 +111,12 @@ angular.module('portainer.app')
   'use strict';
   return function (date) {
     return moment(date).format('YYYY-MM-DD HH:mm:ss');
+  };
+})
+.filter('uptime', function () {
+  'use strict';
+  return function (timeinsec) {
+    return parseUptime(timeinsec)
   };
 })
 .filter('key', function () {
