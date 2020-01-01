@@ -1,80 +1,57 @@
 angular.module('portainer.docker')
-.controller('EasyDashboardController', ['$scope', '$q', 'ContainerService', 'ImageService', 'NetworkService', 'VolumeService', 'SystemService', 'ServiceService', 'StackService', 'TemplateService', 'EndpointService', 'Notifications', 'EndpointProvider', 'StateManager',
-function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeService, SystemService, ServiceService, StackService, TemplateService, EndpointService, Notifications, EndpointProvider, StateManager) {
+.controller('EasyDashboardController', ['$scope', '$q', 'GradingHelper', 'ContainerService', 'ImageService', 'NetworkService', 'VolumeService', 'SystemService', 'ServiceService', 'StackService', 'TemplateService', 'EndpointService', 'Notifications', 'EndpointProvider', 'StateManager',
+function ($scope, $q, GradingHelper, ContainerService, ImageService, NetworkService, VolumeService, SystemService, ServiceService, StackService, TemplateService, EndpointService, Notifications, EndpointProvider, StateManager) {
 
   $scope.dismissInformationPanel = function(id) {
     StateManager.dismissInformationPanel(id);
   };
 
   $scope.offlineMode = false;
-  $scope.gradeColor = "#000000";
-  
-  function calculateGrade(cpuUsage, ramUsage, diskUsage, temperature) {
-      var gradeVal = 0.0;
-      
-      //Calculate system value
-      gradeVal += cpuUsage * 2;
-      
-      gradeVal += ramUsage * 1.5;
-      
-      gradeVal += diskUsage * 4;
-      
-      if (temperature < 45) {
-          //Do  nothing
-      }
-      else if(temperature <= 50) {
-          gradeVal += 25;
-      }
-      else if(temperature <= 60) {
-          gradeVal += 50;
-      }
-      else if(temperature <= 70) {
-          gradeVal += 200;
-      }
-      else if(temperature <= 80) {
-          gradeVal += 400;
+  $scope.gradeColor = {};
+  $scope.gradeColor.grade = "#000000"
+  $scope.gradeColor.cpu = "#000000"
+  $scope.gradeColor.ram = "#000000"
+  $scope.gradeColor.disk = "#000000"
+  $scope.gradeColor.temperature = "#000000"
+
+  function showWarningsAndErrors()
+  {
+    //CPU warnings
+    if($scope.systemGrade.cpu.score >= 400) {
+      if($scope.systemGrade.cpu.score > 500) {
+        Notifications.error("CPU-Auslastung sehr hoch", new Error("Die CPU-Auslastung ist sehr hoch! Bitte kontrollieren Sie ihre Anwendungen auf deren CPU-Auslastung"), "");
       }
       else {
-          gradeVal += 600;
+        Notifications.warning("CPU-Auslastung erhöht", "Die CPU-Auslastung ist erhöht");
       }
-      
-      //Convert value to grade
-      if (gradeVal <= 50) {
-          $scope.gradeColor = "#00bb00";
-          return "A+";
-      }
-      else if (gradeVal <= 100) {
-          $scope.gradeColor = "#33bb00";
-          return "A";
-      }
-      else if (gradeVal <= 150) {
-          $scope.gradeColor = "#66bb00";
-          return "B+";
-      }
-      else if (gradeVal <= 200) {
-          $scope.gradeColor = "#99bb00";
-          return "B";
-      }
-      else if (gradeVal <= 250) {
-          $scope.gradeColor = "#bbaa00";
-          return "C+";
-      }
-      else if (gradeVal <= 300) {
-          $scope.gradeColor = "#bb8800";
-          return "C";
-      }
-      else if (gradeVal <= 400) {
-          $scope.gradeColor = "#bb4400";
-          return "D";
-      }
-      else if (gradeVal <= 500) {
-          $scope.gradeColor = "#bb0000";
-          return "E";
+    }
+
+    if($scope.systemGrade.ram.score >= 300) {
+      if($scope.systemGrade.ram.score > 500) {
+        Notifications.error("RAM-Auslastung kritisch!", new Error("Die Nutzung des Arbeitsspeichers ist kritisch. Es kann es zu einem unvorhersagbaren Verhalten der Anwenungen kommen!"), "");
       }
       else {
-          $scope.gradeColor = "#ff0000";
-          return "F";
+        Notifications.warning("RAM-Auslastung erhöht", "Die Nutzung des Arbeitsspeichers ist erhöht. Sollte er in einen kritischen Bereich steigen, kann es zu einem unvorhersagbaren Verhalten der Anwenungen kommen!");
       }
+    }
+
+    if($scope.systemGrade.disk.score >= 200) {
+      if($scope.systemGrade.disk.score >= 500) {
+        Notifications.error("Festplatte ist voll!", new Error("Ihre Festplatte ist voll. Bitte erweitern Sie ihren Speicher, da Anwendungen sonst ggf. nicht richtig funktionieren"), "");
+      }
+      else {
+        Notifications.warning("Festplatte füllt sich", "Ihre Festplatte füllt sich und könnte bald voll sein. Erweitern Sie ggf. ihren Speicher");
+      }
+    }
+
+    if($scope.systemGrade.temperature.score >= 100) {
+      if($scope.systemGrade.temperature.score >= 400) {
+        Notifications.error("CPU-Temperatur kritisch!", new Error("Bitte kontrollieren Sie ihre HofBox und sorgen Sie ggf. für eine bessere Kühlung"), "");
+      }
+      else {
+        Notifications.warning("Temperatur", "Die CPU-Temperatur ist erhöht");
+      }
+    }
   }
   
   function initView() {
@@ -105,15 +82,16 @@ function ($scope, $q, ContainerService, ImageService, NetworkService, VolumeServ
       $scope.templates = data.templates;
       $scope.offlineMode = EndpointProvider.offlineMode();
       $scope.cpuTotal = data.info.NCPU;
-      $scope.cpuUsage = data.endpoint.SystemInfo.CPUInfo.Utilization;
+      $scope.cpuUsage = data.endpoint.SystemInfo.CPUInfo.Utilization.LastMin;
       $scope.cpuTemp = data.endpoint.SystemInfo.CPUInfo.Temperature;
       $scope.memUsage = data.endpoint.SystemInfo.MemoryUsage.Used;
       $scope.memTotal = data.endpoint.SystemInfo.MemoryUsage.Total;
       $scope.diskUsed = data.endpoint.SystemInfo.DiskUsage.Used;
       $scope.diskTotal = data.endpoint.SystemInfo.DiskUsage.Total;
-      //$scope.uptime = data.endpoint.SystemInfo.Uptime;
-      $scope.uptime = 1368991;
-      $scope.systemGrade = calculateGrade($scope.cpuUsage, $scope.memUsage / $scope.memTotal, $scope.diskUsed / $scope.diskTotal, $scope.cpuTemp);
+      $scope.uptime = data.endpoint.SystemInfo.Uptime;
+      $scope.systemGrade = GradingHelper.calculateGrade(data.endpoint.SystemInfo.CPUInfo.Utilization, $scope.memUsage / $scope.memTotal, $scope.diskUsed / $scope.diskTotal, $scope.cpuTemp);
+
+      showWarningsAndErrors();
       
       data.containers.forEach(function(item)
       {

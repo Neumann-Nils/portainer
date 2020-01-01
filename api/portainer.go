@@ -265,8 +265,15 @@ type (
 
 	//CPUInfo holds information about the CPU (temperature, utilization,...)
 	CPUInfo struct {
-		Utilization float32 `json:"Utilization"`
-		Temperature int     `json:"Temperature"`
+		Utilization CPUUtilization `json:"Utilization"`
+		Temperature int            `json:"Temperature"`
+	}
+
+	//CPUUtilization for CPUInfo
+	CPUUtilization struct {
+		LastMin        float32 `json:"LastMin"`
+		LastFiveMin    float32 `json:"LastFiveMin"`
+		LastFifteenMin float32 `json:"LastFifteenMin"`
 	}
 
 	//MemoryUsage for endpoint system info

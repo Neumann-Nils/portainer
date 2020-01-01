@@ -35,7 +35,8 @@
           <tbody>
             <tr>
               <td rowspan="0" width="33%">
-                <div class="grade" style="color:{{ gradeColor }}">{{ systemGrade }}</div>
+                <div class="grade" style="color:{{ systemGrade.color }}">{{ systemGrade.grade }}</div>
+                <!--<div style="color:{{ systemGrade.color }}">{{ systemGrade.score }}</div>-->
               </td>
             </tr>
             <tr>
@@ -46,12 +47,13 @@
             </tr>
             <tr>
               <td height="33%">Auslastung</td>
-              <td>CPU: {{ cpuUsage.toFixed(2) }}%<br>
-                  RAM: {{ memUsage | humansize }}/{{ memTotal | humansize }}<br>
-                  Festplatte: {{ diskUsed | humansize }}/{{ diskTotal | humansize }}
+              <td>
+                CPU: <span style="color:{{ systemGrade.cpu.color }}">{{ cpuUsage.toFixed(2) }}%</span><br>
+                RAM: <span style="color:{{ systemGrade.ram.color }}">{{ memUsage | humansize }}/{{ memTotal | humansize }}</span><br>
+                Festplatte: <span style="color:{{ systemGrade.disk.color }}">{{ diskUsed | humansize }}/{{ diskTotal | humansize }}</span><br>
               </td>
               <td>Temperatur</td>
-              <td>{{ cpuTemp }}°C</td>
+              <td><span style="color:{{ systemGrade.temperature.color }}">{{ cpuTemp }}°C</span></td>
             </tr>
             <tr>
               <td>Tags</td>
@@ -65,12 +67,12 @@
                   </span>
                 </span>
               </td>
-              <tr>
+              <!--<tr>
                 <td>Templates</td>
                 <td colspan="3">
                   {{ endpoint }}
                 </td>
-              </tr>
+              </tr>-->
           </tbody>
         </table>
       </rd-widget-body>
