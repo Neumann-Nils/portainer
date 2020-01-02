@@ -65,7 +65,7 @@ function calculateRAMGrade(ramUsage)
             ramGrade.color = "#bb4400";
         } else if(ramUsage <= 90){          //81-90%
             ramGrade.score = 300;
-            ramGrade.color = "#bb0000";
+            ramGrade.color = "#bb4400";
         }
         else {                              //91-100%
             ramGrade.score = 600;
@@ -91,13 +91,13 @@ function calculateDiskGrade(diskUsage)
             diskGrade.color = "#66bb00";
         } else if(diskUsage <= 70){         //61-70%
             diskGrade.score = 50;
-            diskGrade.color = "#bbaa00";
+            diskGrade.color = "#99bb00";
         } else if(diskUsage <= 80){         //71-80%
             diskGrade.score = 100;
-            diskGrade.color = "#bb4400";
+            diskGrade.color = "#bbaa00";
         } else if(diskUsage <= 90){        //81-90%
             diskGrade.score = 200;
-            diskGrade.color = "#bb0000";
+            diskGrade.color = "#bb4400";
         }
         else {                              //91-100%
             diskGrade.score = 600;
@@ -163,22 +163,18 @@ angular.module('portainer.docker')
         
         //CPU grading
         gradeVal.cpu = calculateCPUGrade(cpuUsage);
-        gradeVal.cpu.score *= cpuGradingFactor;
 
         //RAM grading
         gradeVal.ram = calculateRAMGrade(ramUsage);
-        gradeVal.ram.score *= ramGradingFactor;
         
         //Disk grading
         gradeVal.disk = calculateDiskGrade(diskUsage);
-        gradeVal.disk.score *= diskGradingFactor;
 
         //Temperature grading
         gradeVal.temperature = calculateTemperatureGrade(temperature);
-        gradeVal.temperature.score *= temperatureGradingFactor;
 
         //Convert from 0-600 system into 0-100 system
-        gradeVal.score = gradeVal.cpu.score + gradeVal.ram.score + gradeVal.disk.score + gradeVal.temperature.score;
+        gradeVal.score = gradeVal.cpu.score * cpuGradingFactor + gradeVal.ram.score * ramGradingFactor + gradeVal.disk.score * diskGradingFactor + gradeVal.temperature.score * temperatureGradingFactor;
         gradeVal.score = 100 - ((gradeVal.score / (maxSingleGradeValue * (cpuGradingFactor + ramGradingFactor + diskGradingFactor + temperatureGradingFactor))) * 100);
         
         //Convert value to grade

@@ -49,7 +49,7 @@
               <td height="33%">Auslastung</td>
               <td>
                 CPU: <span style="color:{{ systemGrade.cpu.color }}">{{ cpuUsage.toFixed(2) }}%</span><br>
-                RAM: <span style="color:{{ systemGrade.ram.color }}">{{ memUsage | humansize }}/{{ memTotal | humansize }}</span><br>
+                RAM: <span style="color:{{ systemGrade.ram.color }}">{{ memUsed | humansize }}/{{ memTotal | humansize }}</span><br>
                 Festplatte: <span style="color:{{ systemGrade.disk.color }}">{{ diskUsed | humansize }}/{{ diskTotal | humansize }}</span><br>
               </td>
               <td>Temperatur</td>

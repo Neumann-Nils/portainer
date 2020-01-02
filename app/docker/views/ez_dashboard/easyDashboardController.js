@@ -17,8 +17,8 @@ function ($scope, $q, GradingHelper, ContainerService, ImageService, NetworkServ
   function showWarningsAndErrors()
   {
     //CPU warnings
-    if($scope.systemGrade.cpu.score >= 400) {
-      if($scope.systemGrade.cpu.score > 500) {
+    if($scope.systemGrade.cpu.score >= 300) {
+      if($scope.systemGrade.cpu.score > 400) {
         Notifications.error("CPU-Auslastung sehr hoch", new Error("Die CPU-Auslastung ist sehr hoch! Bitte kontrollieren Sie ihre Anwendungen auf deren CPU-Auslastung"), "");
       }
       else {
@@ -84,12 +84,13 @@ function ($scope, $q, GradingHelper, ContainerService, ImageService, NetworkServ
       $scope.cpuTotal = data.info.NCPU;
       $scope.cpuUsage = data.endpoint.SystemInfo.CPUInfo.Utilization.LastMin;
       $scope.cpuTemp = data.endpoint.SystemInfo.CPUInfo.Temperature;
-      $scope.memUsage = data.endpoint.SystemInfo.MemoryUsage.Used;
+      $scope.memUsed = data.endpoint.SystemInfo.MemoryUsage.Used;
       $scope.memTotal = data.endpoint.SystemInfo.MemoryUsage.Total;
       $scope.diskUsed = data.endpoint.SystemInfo.DiskUsage.Used;
       $scope.diskTotal = data.endpoint.SystemInfo.DiskUsage.Total;
       $scope.uptime = data.endpoint.SystemInfo.Uptime;
-      $scope.systemGrade = GradingHelper.calculateGrade(data.endpoint.SystemInfo.CPUInfo.Utilization, $scope.memUsage / $scope.memTotal, $scope.diskUsed / $scope.diskTotal, $scope.cpuTemp);
+
+      $scope.systemGrade = GradingHelper.calculateGrade(data.endpoint.SystemInfo.CPUInfo.Utilization, ($scope.memUsed / $scope.memTotal) * 100, ($scope.diskUsed / $scope.diskTotal) * 100, $scope.cpuTemp);
 
       showWarningsAndErrors();
       
