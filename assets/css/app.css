@@ -95,7 +95,8 @@ a[ng-click]{
 .fa.tooltip-icon {
   margin-left: 5px;
   font-size: 1.3em;
-  color: #337ab7;
+  /*color: #337ab7;*/
+  color: #208B69;
 }
 
 .fa.green-icon {
@@ -115,7 +116,8 @@ a[ng-click]{
 }
 
 .fa.blue-icon, .fab.blue-icon {
-  color: #337ab7;
+  /*color: #337ab7;*/
+  color: #208B69;
 }
 
 .text-warning {
@@ -360,7 +362,8 @@ ul.sidebar .sidebar-list a.active {
   color: #fff;
   text-indent: 22px;
   border-left: 3px solid #fff;
-  background: #2d3e63;
+  /*background: #2d3e63;*/
+  background: #208B69;
 }
 
 .sidebar-header {
@@ -368,7 +371,8 @@ ul.sidebar .sidebar-list a.active {
   list-style: none;
   text-indent: 20px;
   font-size: 18px;
-  background: #2d3e63;
+  /*background: #2d3e63;*/
+  background: #208B69;
 }
 
 .sidebar-header a { color: #fff; }
@@ -471,7 +475,8 @@ ul.sidebar .sidebar-list .menu-icon {
 ul.sidebar .sidebar-list .sidebar-sublist a.active {
   color: #fff;
   border-left: 3px solid #fff;
-  background: #2d3e63;
+  /*background: #2d3e63;*/
+  background: #208B69;
 }
 
 @media (max-height: 785px) {
@@ -609,9 +614,12 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 .switch :checked + i, .bootbox-form .checkbox :checked ~ i {
   padding-right: 0;
   padding-left: 24px;
-  -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 0 40px #337ab7;
+  /*-webkit-box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 0 40px #337ab7;
   -moz-box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 0 40px #337ab7;
-  box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 0 40px #337ab7;
+  box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 0 40px #337ab7;*/
+  -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 0 40px #208B69;
+  -moz-box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 0 40px #208B69;
+  box-shadow: inset 0 0 1px rgba(0,0,0,.5), inset 0 0 40px #208B69;
 }
 
 .boxselector_wrapper {
@@ -663,16 +671,20 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 }
 
 .boxselector_wrapper input[type="radio"]:checked + label {
-  background: #337ab7;
+  /*background: #337ab7;*/
+  background: #208B69;
   color: white;
   padding-top: 2rem;
-  border-color: #337ab7;
+  /*border-color: #337ab7;*/
+  border-color: #208B69;
 }
 
 .boxselector_wrapper input[type="radio"]:checked + label::after {
-  color: #337ab7;
+  /*color: #337ab7;*/
+  color: #208B69;
   font-family: "Font Awesome 5 Free";
-  border: 2px solid #337ab7;
+  /*border: 2px solid #337ab7;*/
+  border: 2px solid #208B69;
   content: "\f00c";
   font-size: 16px;
   font-weight: bold;
@@ -703,8 +715,10 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 }
 
 .visualizer_container .node {
-  border: 1px dashed #337ab7;
-  background-color: rgb(51, 122, 183);
+  /*border: 1px dashed #337ab7;*/
+  border: 1px dashed #208b69;
+  /*background-color: rgb(51, 122, 183);*/
+  background-color: rgb(32, 139, 105);
   background-color: rgba(51, 122, 183, 0.1);
   border-radius: 4px;
   box-shadow: 0 3px 10px -2px rgba(161, 170, 166, 0.5);
@@ -776,7 +790,8 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 
 .visualizer_container .node .tasks .task_info {
   border-radius: 4px;
-  background-color: rgb(70, 184, 218);
+  /*background-color: rgb(70, 184, 218);*/
+  background-color: rgb(83, 177, 147);
   background-color: rgba(70, 184, 218, 0.2);
 }
 
@@ -819,8 +834,10 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 .tag {
   padding: 2px 6px;
   color: white;
-  background-color: #337ab7;
-  border: 1px solid #2e6da4;
+  /*background-color: #337ab7;
+  border: 1px solid #2e6da4;*/
+  background-color: #208b69;
+  border: 1px solid #53B193;
   border-radius: 4px;
 }
 
@@ -873,14 +890,16 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 
 .multiSelect .multiSelectItem:not(.multiSelectGroup).selected
 {
-  background-image: linear-gradient( #337ab7, #337ab7 );
+  /*background-image: linear-gradient( #337ab7, #337ab7 );*/
+  background-image: linear-gradient( #208b69, #208b69 );
   color: #fff;
   border: none;
 }
 
 .multiSelect .multiSelectItem:hover,
 .multiSelect .multiSelectGroup:hover {
-  background-image: linear-gradient( #337ab7 , #337ab7 ) !important;
+  /*background-image: linear-gradient( #337ab7 , #337ab7 ) !important;*/
+  background-image: linear-gradient( #208b69 , #208b69 ) !important;
   color: #fff !important;
 }
 

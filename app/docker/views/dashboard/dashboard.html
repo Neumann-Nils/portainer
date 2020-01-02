@@ -38,8 +38,8 @@
               <td>
                 {{ endpoint.Name }}
                 <span class="small text-muted space-left">
-                    <i class="fa fa-microchip"></i> {{ endpoint.Snapshots[0].TotalCPU }} {{ endpoint.Snapshots[0].TempCPU }}°C
-                    <i class="fa fa-memory space-left"></i> {{ endpoint.Snapshots[0].TotalMemory | humansize }}
+                    <i class="fa fa-microchip"></i> {{ info.NCPU }}
+                    <i class="fa fa-memory space-left"></i> {{ endpoint.SystemInfo.MemoryUsage.Total | humansize }}
                 </span>
                 <span class="small text-muted"> - {{ info.Swarm && info.Swarm.NodeID !== '' ? 'Swarm' : 'Standalone' }} {{ info.ServerVersion }} <span ng-if="endpoint.Type === 2">+ <i class="fa fa-bolt" aria-hidden="true"></i>  Agent</span></span>
               </td>
@@ -61,12 +61,6 @@
                 </span>
               </td>
             </tr>
-            <tr>
-              <td>Snapshot Info</td>
-              <td>
-                {{ endpoint.Snapshots[0] }}
-              </td>
-            </tr>
             <tr ng-if="applicationState.endpoint.mode.provider === 'DOCKER_SWARM_MODE' && applicationState.endpoint.mode.role === 'MANAGER'">
               <td colspan="2">
                 <div class="btn-group" role="group" aria-label="...">
@@ -86,7 +80,7 @@
     <a ui-sref="portainer.stacks">
       <rd-widget>
         <rd-widget-body>
-          <div class="widget-icon blue pull-left">
+          <div class="widget-icon green pull-left">
             <i class="fa fa-th-list"></i>
           </div>
           <div class="title">{{ stackCount }}</div>
@@ -99,7 +93,7 @@
     <a ui-sref="docker.services">
       <rd-widget>
         <rd-widget-body>
-          <div class="widget-icon blue pull-left">
+          <div class="widget-icon green pull-left">
             <i class="fa fa-list-alt"></i>
           </div>
           <div class="title">{{ serviceCount }}</div>
@@ -112,7 +106,7 @@
     <a ui-sref="docker.containers">
       <rd-widget>
         <rd-widget-body>
-          <div class="widget-icon blue pull-left">
+          <div class="widget-icon green pull-left">
             <i class="fa fa-server"></i>
           </div>
           <div class="pull-right">
@@ -129,7 +123,7 @@
     <a ui-sref="docker.images">
       <rd-widget>
         <rd-widget-body>
-          <div class="widget-icon blue pull-left">
+          <div class="widget-icon green pull-left">
             <i class="fa fa-clone"></i>
           </div>
           <div class="pull-right">
@@ -145,7 +139,7 @@
     <a ui-sref="docker.volumes">
       <rd-widget>
         <rd-widget-body>
-          <div class="widget-icon blue pull-left">
+          <div class="widget-icon green pull-left">
             <i class="fa fa-cubes"></i>
           </div>
           <div class="title">{{ volumeCount }}</div>
@@ -158,7 +152,7 @@
     <a ui-sref="docker.networks">
       <rd-widget>
         <rd-widget-body>
-          <div class="widget-icon blue pull-left">
+          <div class="widget-icon green pull-left">
             <i class="fa fa-sitemap"></i>
           </div>
           <div class="title">{{ networkCount }}</div>

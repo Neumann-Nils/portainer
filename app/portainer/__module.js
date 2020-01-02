@@ -98,6 +98,10 @@ angular.module('portainer.app', [])
       'content@': {
         templateUrl: './views/account/account.html',
         controller: 'AccountController'
+      },
+      'ez_content@': {
+        templateUrl: './views/account/account.html',
+        controller: 'AccountController'
       }
     }
   };

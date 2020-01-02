@@ -98,7 +98,7 @@ function ($scope, $q, GradingHelper, ContainerService, ImageService, NetworkServ
         item.info = {};
         item.info.isRunning = (item.State === "running" ? true : false);
         item.info.name = item.Names[0];
-        item.info.comment = "Comment here please";
+        item.info.comment = "(Keine Informationen)";
         for (let i = 0; i < $scope.templates.length; i++)
         {
           if($scope.templates[i].RegistryModel.Image === item.Image)
