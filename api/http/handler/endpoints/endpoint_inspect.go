@@ -43,18 +43,19 @@ func (handler *Handler) endpointInspect(w http.ResponseWriter, r *http.Request) 
 func getCPUInformation(sysInfo *portainer.EndpointSystemInfo) {
 	//Piped command: sensors -u | grep -A 1 'Package' | grep 'temp1_input:' | grep -o '[0-9]*' | awk '{i++}i==2'
 	//Alternative command for Raspberry Pi: vcgencmd measure_temp | egrep -o '[0-9]*\.[0-9]*'
+	//Alternative command for linux cat /sys/class/thermal/thermal_zone0/temp | head -c2
 	//Piped command: cat /proc/stat | grep 'cpu [0-9]*' | grep -o '[0-9]*'
 	//Piped command: uptime | grep -o 'load average: .*' | grep -o '[0-9]*'
 	var temp int = 0
 
 	//Get cpu temperature from sensors command
-	cmd, err := exec.Command("bash", "-c", "sensors -u | grep -A 1 'Package' | grep 'temp1_input:' | grep -o '[0-9]*' | awk '{i++}i==2'").Output()
+	cmd, err := exec.Command("bash", "-c", "cat /sys/class/thermal/thermal_zone0/temp | head -c2").Output()
 	if err != nil {
-		sysInfo.Error = append(sysInfo.Error, "Failed to execute command 'sensors'")
+		sysInfo.Error = append(sysInfo.Error, "Failed to get CPU temperature information")
 	}
 
 	//Go through each character and add up the temperature (last char is a new-line character)
-	for i := 0; i < len(cmd)-1; i++ {
+	for i := 0; i < len(cmd); i++ {
 		temp += int(cmd[i] % 48)
 		temp *= 10
 	}

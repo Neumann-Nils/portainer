@@ -152,6 +152,7 @@ angular.module('portainer.docker')
     var maxSingleGradeValue = 600;
 
     //TODO: Which grading factors are good?
+    //TODO: Read values from json file
     var cpuGradingFactor = 0.5;
     var ramGradingFactor = 0.75;
     var diskGradingFactor = 0.5;
