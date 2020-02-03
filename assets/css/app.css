@@ -95,7 +95,6 @@ a[ng-click]{
 .fa.tooltip-icon {
   margin-left: 5px;
   font-size: 1.3em;
-  /*color: #337ab7;*/
   color: #208B69;
 }
 
@@ -116,7 +115,6 @@ a[ng-click]{
 }
 
 .fa.blue-icon, .fab.blue-icon {
-  /*color: #337ab7;*/
   color: #208B69;
 }
 
@@ -362,7 +360,6 @@ ul.sidebar .sidebar-list a.active {
   color: #fff;
   text-indent: 22px;
   border-left: 3px solid #fff;
-  /*background: #2d3e63;*/
   background: #208B69;
 }
 
@@ -371,7 +368,6 @@ ul.sidebar .sidebar-list a.active {
   list-style: none;
   text-indent: 20px;
   font-size: 18px;
-  /*background: #2d3e63;*/
   background: #208B69;
 }
 
@@ -475,7 +471,6 @@ ul.sidebar .sidebar-list .menu-icon {
 ul.sidebar .sidebar-list .sidebar-sublist a.active {
   color: #fff;
   border-left: 3px solid #fff;
-  /*background: #2d3e63;*/
   background: #208B69;
 }
 
@@ -680,10 +675,8 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 }
 
 .boxselector_wrapper input[type="radio"]:checked + label::after {
-  /*color: #337ab7;*/
   color: #208B69;
   font-family: "Font Awesome 5 Free";
-  /*border: 2px solid #337ab7;*/
   border: 2px solid #208B69;
   content: "\f00c";
   font-size: 16px;
@@ -715,9 +708,7 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 }
 
 .visualizer_container .node {
-  /*border: 1px dashed #337ab7;*/
   border: 1px dashed #208b69;
-  /*background-color: rgb(51, 122, 183);*/
   background-color: rgb(32, 139, 105);
   background-color: rgba(51, 122, 183, 0.1);
   border-radius: 4px;
@@ -834,8 +825,6 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 .tag {
   padding: 2px 6px;
   color: white;
-  /*background-color: #337ab7;
-  border: 1px solid #2e6da4;*/
   background-color: #208b69;
   border: 1px solid #53B193;
   border-radius: 4px;
@@ -890,7 +879,6 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 
 .multiSelect .multiSelectItem:not(.multiSelectGroup).selected
 {
-  /*background-image: linear-gradient( #337ab7, #337ab7 );*/
   background-image: linear-gradient( #208b69, #208b69 );
   color: #fff;
   border: none;
@@ -898,7 +886,6 @@ ul.sidebar .sidebar-list .sidebar-sublist a.active {
 
 .multiSelect .multiSelectItem:hover,
 .multiSelect .multiSelectGroup:hover {
-  /*background-image: linear-gradient( #337ab7 , #337ab7 ) !important;*/
   background-image: linear-gradient( #208b69 , #208b69 ) !important;
   color: #fff !important;
 }

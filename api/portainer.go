@@ -97,6 +97,14 @@ type (
 		GroupAttribute string `json:"GroupAttribute"`
 	}
 
+	// GradingSettings represents the grading factors
+	GradingSettings struct {
+		CPUGradingFactor     float32 `json:"CPUGradingFactor"`
+		RAMGradingFactor     float32 `json:"RAMGradingFactor"`
+		DiskGradingFactor    float32 `json:"DiskGradingFactor"`
+		CPUTempGradingFactor float32 `json:"CPUTempGradingFactor"`
+	}
+
 	// Settings represents the application settings
 	Settings struct {
 		LogoURL                            string               `json:"LogoURL"`
@@ -111,6 +119,7 @@ type (
 		TemplatesURL                       string               `json:"TemplatesURL"`
 		EnableHostManagementFeatures       bool                 `json:"EnableHostManagementFeatures"`
 		EdgeAgentCheckinInterval           int                  `json:"EdgeAgentCheckinInterval"`
+		GradingSettings                    GradingSettings      `json:"GradingSettings"`
 
 		// Deprecated fields
 		DisplayDonationHeader       bool

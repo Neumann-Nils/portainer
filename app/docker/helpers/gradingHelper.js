@@ -98,8 +98,11 @@ function calculateDiskGrade(diskUsage)
         } else if(diskUsage <= 90){        //81-90%
             diskGrade.score = 200;
             diskGrade.color = "#bb4400";
+        } else if(diskUsage <= 95){        //91-95%
+            diskGrade.score = 300;
+            diskGrade.color = "#bb4400";
         }
-        else {                              //91-100%
+        else {                              //96-100%
             diskGrade.score = 600;
             diskGrade.color = "#ff0000";
         }
@@ -122,11 +125,14 @@ function calculateTemperatureGrade(temperature)
         if(temperature <= 60) {                 //56-60°C
             temperatureGrade.score = 25;
             temperatureGrade.color = "#66bb00";
-        } else if(temperature <= 70){           //61-70°C
+        } else if(temperature <= 65){           //61-65°C
             temperatureGrade.score = 50;
             temperatureGrade.color = "#bbaa00";
-        }else if(temperature <= 70){           //71-75°C
+        } else if(temperature <= 70){           //66-70°C
             temperatureGrade.score = 100;
+            temperatureGrade.color = "#bb8800";
+        } else if(temperature <= 75){           //71-75°C
+            temperatureGrade.score = 200;
             temperatureGrade.color = "#bb8800";
         } else if(temperature <= 80){           //76-80°C
             temperatureGrade.score = 300;
@@ -151,16 +157,13 @@ angular.module('portainer.docker')
     var helper = {};
     var maxSingleGradeValue = 600;
 
-    //TODO: Which grading factors are good?
-    //TODO: Read values from json file
-    var cpuGradingFactor = 0.5;
-    var ramGradingFactor = 0.75;
-    var diskGradingFactor = 0.5;
-    var temperatureGradingFactor = 1;
-
-    helper.calculateGrade = function(cpuUsage, ramUsage, diskUsage, temperature)
+    helper.calculateGrade = function(gradingFactors, cpuUsage, ramUsage, diskUsage, temperature)
     {
         var gradeVal = {};
+        var cpuGradingFactor = gradingFactors.CPUGradingFactor;
+        var ramGradingFactor = gradingFactors.RAMGradingFactor;
+        var diskGradingFactor = gradingFactors.DiskGradingFactor;
+        var temperatureGradingFactor = gradingFactors.CPUTempGradingFactor;
         
         //CPU grading
         gradeVal.cpu = calculateCPUGrade(cpuUsage);
@@ -176,7 +179,9 @@ angular.module('portainer.docker')
 
         //Convert from 0-600 system into 0-100 system
         gradeVal.score = gradeVal.cpu.score * cpuGradingFactor + gradeVal.ram.score * ramGradingFactor + gradeVal.disk.score * diskGradingFactor + gradeVal.temperature.score * temperatureGradingFactor;
+        console.log(gradeVal.cpu.score * cpuGradingFactor + gradeVal.ram.score * ramGradingFactor + gradeVal.disk.score * diskGradingFactor + gradeVal.temperature.score * temperatureGradingFactor);
         gradeVal.score = 100 - ((gradeVal.score / (maxSingleGradeValue * (cpuGradingFactor + ramGradingFactor + diskGradingFactor + temperatureGradingFactor))) * 100);
+        console.log(gradeVal);
         
         //Convert value to grade
         if (gradeVal.score > 95) {

@@ -152,6 +152,43 @@
             </div>
           </div>
           <!-- !edge -->
+          <!-- grading -->
+          <div class="col-sm-12 form-section-title">
+            Grading System
+          </div>
+          <!-- You can edit the grading factors below. The value of each factor should be between 0 (0%) and 1 (100%). However, you can set every float32 value you want, but does it make sense? -->
+          <div class="form-group" ng-if="applicationState.expertMode">
+            <div class="col-sm-12 table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Gradingfactor</th>
+                    <th>Value</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>CPU Usage</td>
+                    <td><input type="number" class="form-control" ng-model="formValues.gradingFactors.CPUGradingFactor" id="cpuGradingFactor" placeholder="0.5"></td>
+                  </tr>
+                  <tr>
+                    <td>CPU Temperature</td>
+                    <td><input type="number" class="form-control" ng-model="formValues.gradingFactors.CPUTempGradingFactor" id="cpuTempGradingFactor" placeholder="0.5"></td>
+                  </tr>
+                  <tr>
+                    <td>RAM Usage</td>
+                    <td><input type="number" class="form-control" ng-model="formValues.gradingFactors.RAMGradingFactor" id="ramGradingFactor" placeholder="0.5"></td>
+                  </tr>
+                  <tr>
+                    <td>Diskspace</td>
+                    <td><input type="number" class="form-control" ng-model="formValues.gradingFactors.DiskGradingFactor" id="diskGradingFactor" placeholder="0.5"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- !grading -->
           <!-- actions -->
           <div class="form-group">
             <div class="col-sm-12">

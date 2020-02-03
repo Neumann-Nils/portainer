@@ -6,7 +6,7 @@ import (
 
 	httperror "github.com/portainer/libhttp/error"
 	"github.com/portainer/libhttp/response"
-	"github.com/portainer/portainer/api"
+	portainer "github.com/portainer/portainer/api"
 )
 
 type publicSettingsResponse struct {
@@ -18,6 +18,7 @@ type publicSettingsResponse struct {
 	EnableHostManagementFeatures       bool                           `json:"EnableHostManagementFeatures"`
 	ExternalTemplates                  bool                           `json:"ExternalTemplates"`
 	OAuthLoginURI                      string                         `json:"OAuthLoginURI"`
+	GradingSettings                    portainer.GradingSettings      `json:"GradingSettings"`
 }
 
 // GET request on /api/settings/public
@@ -40,6 +41,7 @@ func (handler *Handler) settingsPublic(w http.ResponseWriter, r *http.Request) *
 			settings.OAuthSettings.ClientID,
 			settings.OAuthSettings.RedirectURI,
 			settings.OAuthSettings.Scopes),
+		GradingSettings: settings.GradingSettings,
 	}
 
 	if settings.TemplatesURL != "" {

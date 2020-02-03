@@ -90,7 +90,7 @@ function ($scope, $q, GradingHelper, ContainerService, ImageService, NetworkServ
       $scope.diskTotal = data.endpoint.SystemInfo.DiskUsage.Total;
       $scope.uptime = data.endpoint.SystemInfo.Uptime;
 
-      $scope.systemGrade = GradingHelper.calculateGrade(data.endpoint.SystemInfo.CPUInfo.Utilization, ($scope.memUsed / $scope.memTotal) * 100, ($scope.diskUsed / $scope.diskTotal) * 100, $scope.cpuTemp);
+      $scope.systemGrade = GradingHelper.calculateGrade(StateManager.getState().application.gradingFactors, data.endpoint.SystemInfo.CPUInfo.Utilization, ($scope.memUsed / $scope.memTotal) * 100, ($scope.diskUsed / $scope.diskTotal) * 100, $scope.cpuTemp);
 
       showWarningsAndErrors();
       

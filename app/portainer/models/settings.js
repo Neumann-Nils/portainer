@@ -4,6 +4,7 @@ export function SettingsViewModel(data) {
   this.AuthenticationMethod = data.AuthenticationMethod;
   this.LDAPSettings = data.LDAPSettings;
   this.OAuthSettings = new OAuthSettingsViewModel(data.OAuthSettings);
+  this.GradingSettings = data.GradingSettings;
   this.AllowBindMountsForRegularUsers = data.AllowBindMountsForRegularUsers;
   this.AllowPrivilegedModeForRegularUsers = data.AllowPrivilegedModeForRegularUsers;
   this.AllowVolumeBrowserForRegularUsers = data.AllowVolumeBrowserForRegularUsers;
@@ -23,6 +24,7 @@ export function PublicSettingsViewModel(settings) {
   this.ExternalTemplates = settings.ExternalTemplates;
   this.LogoURL = settings.LogoURL;
   this.OAuthLoginURI = settings.OAuthLoginURI;
+  this.GradingSettings = settings.GradingSettings;
 }
 
 export function LDAPSettingsViewModel(data) {

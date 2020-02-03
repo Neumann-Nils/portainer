@@ -17,7 +17,7 @@ function StateManagerFactory($q, SystemService, InfoHelper, EndpointProvider, Lo
       dismissedInfoPanels: {},
       dismissedInfoHash: ''
     },
-    extensions: []
+    extensions: [],
   };
 
   manager.setVersionInfo = function(versionInfo) {
@@ -67,6 +67,11 @@ function StateManagerFactory($q, SystemService, InfoHelper, EndpointProvider, Lo
     state.application.enableVolumeBrowserForNonAdminUsers = enableVolumeBrowserForNonAdminUsers;
     LocalStorage.storeApplicationState(state.application);
   };
+
+  manager.updateGradingFactors = function(gradingFactors) {
+    state.application.gradingFactors = gradingFactors;
+    LocalStorage.storeApplicationState(state.application);
+  }
   
   manager.updateExpertMode = function(expert) {
     state.expertMode = expert;
@@ -80,6 +85,7 @@ function StateManagerFactory($q, SystemService, InfoHelper, EndpointProvider, Lo
    state.application.snapshot = status.Snapshot;
    state.application.version = status.Version;
    state.application.logo = settings.LogoURL;
+   state.application.gradingFactors = settings.GradingSettings;
    state.application.snapshotInterval = settings.SnapshotInterval;
    state.application.enableHostManagementFeatures = settings.EnableHostManagementFeatures;
    state.application.enableVolumeBrowserForNonAdminUsers = settings.AllowVolumeBrowserForRegularUsers;

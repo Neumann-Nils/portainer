@@ -30,6 +30,12 @@ function ($scope, $state, Notifications, SettingsService, StateManager) {
     labelValue: '',
     enableHostManagementFeatures: false,
     enableVolumeBrowser: false,
+    gradingFactors: {
+      CPUGradingFactor: 0,
+      RAMGradingFactor: 0,
+      DiskGradingFactor: 0,
+      CPUTempGradingFactor: 0,
+    },
   };
 
   $scope.removeFilteredContainerLabel = function(index) {
@@ -66,6 +72,7 @@ function ($scope, $state, Notifications, SettingsService, StateManager) {
     settings.AllowPrivilegedModeForRegularUsers = !$scope.formValues.restrictPrivilegedMode;
     settings.AllowVolumeBrowserForRegularUsers = $scope.formValues.enableVolumeBrowser;
     settings.EnableHostManagementFeatures = $scope.formValues.enableHostManagementFeatures;
+    settings.GradingSettings = $scope.formValues.gradingFactors;
 
     $scope.state.actionInProgress = true;
     updateSettings(settings);
@@ -80,6 +87,7 @@ function ($scope, $state, Notifications, SettingsService, StateManager) {
       StateManager.updateEnableHostManagementFeatures(settings.EnableHostManagementFeatures);
       StateManager.updateEnableVolumeBrowserForNonAdminUsers(settings.AllowVolumeBrowserForRegularUsers);
       StateManager.updateExpertMode(settings.ExpertMode);
+      StateManager.updateGradingFactors(settings.GradingSettings);
       $state.reload();
     })
     .catch(function error(err) {
@@ -105,6 +113,7 @@ function ($scope, $state, Notifications, SettingsService, StateManager) {
       $scope.formValues.restrictPrivilegedMode = !settings.AllowPrivilegedModeForRegularUsers;
       $scope.formValues.enableVolumeBrowser = settings.AllowVolumeBrowserForRegularUsers;
       $scope.formValues.enableHostManagementFeatures = settings.EnableHostManagementFeatures;
+      $scope.formValues.gradingFactors = settings.GradingSettings;
     })
     .catch(function error(err) {
       Notifications.error('Failure', err, 'Unable to retrieve application settings');

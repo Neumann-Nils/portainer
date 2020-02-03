@@ -58,7 +58,7 @@
             <li><a ng-click="$ctrl.forceRemoveAction($ctrl.state.selectedItems, true)" ng-disabled="$ctrl.state.selectedItemCount === 0">Force Remove</a></li>
           </ul>
         </div>
-        <button type="button" class="btn btn-sm btn-primary" ui-sref="docker.images.build" authorization="DockerImageBuild">
+        <button type="button" class="btn btn-sm btn-primary" ui-sref="docker.images.build" ng-if="$ctrl.state.expertMode" authorization="DockerImageBuild">
           <i class="fa fa-plus space-right" aria-hidden="true"></i>Build a new image
         </button>
         <div class="btn-group">

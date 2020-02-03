@@ -1,6 +1,6 @@
 angular.module('portainer.docker')
-.controller('ImagesDatatableController', ['$scope', '$controller', 'DatatableService',
-function ($scope, $controller, DatatableService) {
+.controller('ImagesDatatableController', ['$scope', '$controller', 'DatatableService', 'StateManager',
+function ($scope, $controller, DatatableService, StateManager) {
 
   angular.extend(this, $controller('GenericDatatableController', {$scope: $scope}));
 
@@ -14,6 +14,8 @@ function ($scope, $controller, DatatableService) {
       showUnusedImages: true
     }
   };
+
+  this.state.expertMode = StateManager.getState().expertMode;
 
   this.applyFilters = function(value) {
     var image = value;

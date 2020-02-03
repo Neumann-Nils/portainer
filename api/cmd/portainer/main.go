@@ -9,7 +9,7 @@ import (
 
 	"github.com/portainer/portainer/api/chisel"
 
-	"github.com/portainer/portainer/api"
+	portainer "github.com/portainer/portainer/api"
 	"github.com/portainer/portainer/api/bolt"
 	"github.com/portainer/portainer/api/cli"
 	"github.com/portainer/portainer/api/cron"
@@ -275,6 +275,12 @@ func initSettings(settingsService portainer.SettingsService, flags *portainer.CL
 			EnableHostManagementFeatures:       false,
 			SnapshotInterval:                   *flags.SnapshotInterval,
 			EdgeAgentCheckinInterval:           portainer.DefaultEdgeAgentCheckinIntervalInSeconds,
+			GradingSettings: portainer.GradingSettings{
+				CPUGradingFactor:     0.5,
+				RAMGradingFactor:     0.75,
+				DiskGradingFactor:    0.5,
+				CPUTempGradingFactor: 1.0,
+			},
 		}
 
 		if *flags.Templates != "" {

@@ -7,7 +7,7 @@ import (
 	httperror "github.com/portainer/libhttp/error"
 	"github.com/portainer/libhttp/request"
 	"github.com/portainer/libhttp/response"
-	"github.com/portainer/portainer/api"
+	portainer "github.com/portainer/portainer/api"
 	"github.com/portainer/portainer/api/filesystem"
 )
 
@@ -24,6 +24,7 @@ type settingsUpdatePayload struct {
 	SnapshotInterval                   *string
 	TemplatesURL                       *string
 	EdgeAgentCheckinInterval           *int
+	GradingSettings                    *portainer.GradingSettings
 }
 
 func (payload *settingsUpdatePayload) Validate(r *http.Request) error {
@@ -113,6 +114,10 @@ func (handler *Handler) settingsUpdate(w http.ResponseWriter, r *http.Request) *
 
 	if payload.EdgeAgentCheckinInterval != nil {
 		settings.EdgeAgentCheckinInterval = *payload.EdgeAgentCheckinInterval
+	}
+
+	if payload.GradingSettings != nil {
+		settings.GradingSettings = *payload.GradingSettings
 	}
 
 	tlsError := handler.updateTLS(settings)
