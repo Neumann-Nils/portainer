@@ -3,10 +3,6 @@
 function patch_rzslider()
 {
 	echo "Patching 'node_modules/angularjs-slider/dist/rzslider.css'..."
-	#sed -i "s/\  background: #0db9f0;/  background: #208B69;/g" node_modules/angularjs-slider/dist/rzslider.css
-	#sed -i "s/\  background-color: #0db9f0;/  background-color: #208B69;/g" node_modules/angularjs-slider/dist/rzslider.css
-	#sed -i "s/\  background: #0db9f0;/  background: #208B69;/g" node_modules/angularjs-slider/dist/rzslider.scss
-	#sed -i "s/\  background-color: #0db9f0;/  background-color: #208B69;/g" node_modules/angularjs-slider/dist/rzslider.scss
 	sed -i "s/#0db9f0/#208B69/g" node_modules/angularjs-slider/dist/rzslider.css
 }
 
@@ -58,13 +54,14 @@ function main()
 {
 	git checkout -b portainer-develop develop
 	git pull git://github.com/portainer/portainer.git develop
-	
+
 	git checkout develop
 	git merge --no-ff portainer-develop
 	#git push origin develop
-	
+
+	yarn
 	yarn build
-	
+
 	patch_css
 }
 
