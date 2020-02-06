@@ -60,7 +60,7 @@ function main()
 	#git push origin develop
 
 	docker rmi -f portainer/base:latest
-	cat portainer_base.tar | docker import - portainer/base:latest
+	docker load portainer_base.tar
 
 	yarn
 	yarn build
