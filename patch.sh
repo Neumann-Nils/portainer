@@ -59,6 +59,9 @@ function main()
 	git merge --no-ff portainer-develop
 	#git push origin develop
 
+	docker rmi -f portainer/base:latest
+	cat portainer_base.tar | docker import - portainer/base:latest
+
 	yarn
 	yarn build
 

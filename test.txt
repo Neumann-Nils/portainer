@@ -1,2 +1,0 @@
-color: #BBCCFF;
-background-color: #BBCCFF;

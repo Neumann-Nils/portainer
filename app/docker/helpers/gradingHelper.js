@@ -179,9 +179,7 @@ angular.module('portainer.docker')
 
         //Convert from 0-600 system into 0-100 system
         gradeVal.score = gradeVal.cpu.score * cpuGradingFactor + gradeVal.ram.score * ramGradingFactor + gradeVal.disk.score * diskGradingFactor + gradeVal.temperature.score * temperatureGradingFactor;
-        console.log(gradeVal.cpu.score * cpuGradingFactor + gradeVal.ram.score * ramGradingFactor + gradeVal.disk.score * diskGradingFactor + gradeVal.temperature.score * temperatureGradingFactor);
         gradeVal.score = 100 - ((gradeVal.score / (maxSingleGradeValue * (cpuGradingFactor + ramGradingFactor + diskGradingFactor + temperatureGradingFactor))) * 100);
-        console.log(gradeVal);
         
         //Convert value to grade
         if (gradeVal.score > 95) {
