@@ -60,6 +60,10 @@ angular.module('portainer.docker', ['portainer.app'])
       'content@': {
         templateUrl: './views/containers/containers.html',
         controller: 'ContainersController'
+      },
+      'ez_content@': {
+        templateUrl: './views/containers/containers.html',
+        controller: 'ContainersController'
       }
     }
   };

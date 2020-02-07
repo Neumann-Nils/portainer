@@ -248,6 +248,10 @@ angular.module('portainer.app', [])
       'content@': {
         templateUrl: './views/init/endpoint/initEndpoint.html',
         controller: 'InitEndpointController'
+      },
+      'ez_content@': {
+        templateUrl: './views/init/endpoint/initEndpoint.html',
+        controller: 'InitEndpointController'
       }
     }
   };

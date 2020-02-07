@@ -156,14 +156,13 @@
           <div class="col-sm-12 form-section-title">
             Grading System
           </div>
-          <!-- You can edit the grading factors below. The value of each factor should be between 0 (0%) and 1 (100%). However, you can set every float32 value you want, but does it make sense? -->
           <div class="form-group" ng-if="applicationState.expertMode">
             <div class="col-sm-12 table-responsive">
               <table class="table table-hover">
                 <thead>
                   <tr>
-                    <th>Gradingfactor</th>
-                    <th>Value</th>
+                    <th><label>Gradingfactor<portainer-tooltip position="bottom" message="A gradingfactor describes the impact of the corresponding grade on the final grade. The value of each factor should be between 0 (0%) and 1 (100%)."></portainer-tooltip></label></th>
+                    <th><label>Value</label></th>
                     <th></th>
                   </tr>
                 </thead>
