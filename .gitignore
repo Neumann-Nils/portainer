@@ -1,5 +1,4 @@
 node_modules
-node_modules.old
 bower_components
 dist
 portainer-checksum.txt
@@ -11,3 +10,4 @@ api/cmd/portainer/portainer*
 .tern-project
 .project
 .godir
+HofBox.tar.gz
