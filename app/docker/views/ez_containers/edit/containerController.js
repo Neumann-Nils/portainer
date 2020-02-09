@@ -45,7 +45,7 @@ function ($q, $scope, $state, $transition$, $filter, Commit, ContainerHelper, Co
 
       for (let i = 0; i < data.templates.length; i++)
       {
-        if(data.templates[i].Image === container.Config.Image)
+        if(data.templates[i].RegistryModel.Image === container.Config.Image)
         {
           $scope.container.Application.Name = data.templates[i].Title;
           $scope.container.Application.Comment = data.templates[i].Description;
